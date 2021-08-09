@@ -3,7 +3,9 @@ import React from 'react';
 import { Image, StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-export default function App() {
+import Footer from '../components/Footer'
+
+export default function App({ navigation }) {
     return (
         <SafeAreaView style={styles.container}>
             <Image
@@ -14,19 +16,19 @@ export default function App() {
             <Text style={{ fontSize: 30, textDecorationLine: 'underline', margin: 20 }}>Select Service Option</Text>
             <View style={styles.btnContainer}>
                 <View style={styles.btncol}>
-                    <TouchableOpacity style={{ ...styles.button, backgroundColor: 'skyblue' }}>
+                    <TouchableOpacity onPress={() => { navigation.navigate('ProductSel', { Sid: 1 }) }} style={{ ...styles.button, backgroundColor: 'skyblue' }}>
                         <Text style={styles.btnText}>INSTALLATION</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={{ ...styles.button, backgroundColor: 'lightgreen' }}>
+                    <TouchableOpacity onPress={() => { navigation.navigate('ProductSel', { Sid: 2 }) }} style={{ ...styles.button, backgroundColor: 'lightgreen' }}>
                         <Text style={styles.btnText}>Preventive Regular
                             Maintenance</Text>
                     </TouchableOpacity>
                 </View>
                 <View style={styles.btncol}>
-                    <TouchableOpacity style={{ ...styles.button, backgroundColor: 'yellow' }}>
+                    <TouchableOpacity onPress={() => { navigation.navigate('ProductSel', { Sid: 3 }) }} style={{ ...styles.button, backgroundColor: 'yellow' }}>
                         <Text style={styles.btnText}>Repair</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={{ ...styles.button, backgroundColor: 'lightgray' }}>
+                    <TouchableOpacity onPress={() => { navigation.navigate('ProductSel', { Sid: 4 }) }} style={{ ...styles.button, backgroundColor: 'lightgray' }}>
                         <Text style={styles.btnText}>
                             AMC{"\n"}<Text style={{ fontSize: 15 }}>(Annual Maintenance Contract)</Text>
                         </Text>
@@ -38,6 +40,7 @@ export default function App() {
             <TouchableOpacity style={styles.btnNewProduct} >
                 <Text style={{ alignSelf: 'center', fontSize: 17 }}>Register for New Product Warranty</Text>
             </TouchableOpacity>
+            <Footer />
         </SafeAreaView>
     );
 }
@@ -47,7 +50,8 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#fff',
         alignItems: 'center',
-        // justifyContent: 'space-between',
+        // justifyContent: 'space-evenly'
+        justifyContent: 'space-between',
     },
     btnContainer: {
         alignContent: 'center',
@@ -81,8 +85,9 @@ const styles = StyleSheet.create({
         borderWidth: 2,
         borderRadius: 10,
         alignSelf: 'center',
-        position: 'absolute',
-        bottom: 40,
+        marginTop: 50,
+        // position: 'absolute',
+        // bottom: 40,
         justifyContent: 'center',
     }
 

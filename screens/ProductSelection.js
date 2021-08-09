@@ -3,7 +3,14 @@ import React from 'react';
 import { Image, StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-export default function App() {
+import Footer from '../components/Footer'
+
+export default function App({ route, navigation }) {
+
+    const { Sid } = route.params;
+    console.log(route.params)
+    console.log(Sid)
+
     return (
         <SafeAreaView style={styles.container}>
             <Image
@@ -34,6 +41,7 @@ export default function App() {
 
 
             </View>
+            <Footer />
         </SafeAreaView>
     );
 }
@@ -43,7 +51,7 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#fff',
         alignItems: 'center',
-        // justifyContent: 'space-between',
+        justifyContent: 'space-between',
     },
     btnContainer: {
         alignContent: 'center',

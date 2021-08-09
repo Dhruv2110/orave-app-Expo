@@ -6,6 +6,8 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import RadioButtonRN from 'radio-buttons-react-native';
 
+import Footer from '../components/Footer'
+
 export default function App() {
 
 
@@ -100,6 +102,7 @@ export default function App() {
             <TouchableOpacity onPress={onContinue} style={styles.btnCont}>
                 <Text style={{ fontSize: 20 }}>Continue {'>>'}</Text>
             </TouchableOpacity>
+            <Footer />
         </SafeAreaView >
     );
 }
@@ -109,6 +112,7 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#fff',
         alignItems: 'center',
+        justifyContent: 'space-between'
         // justifyContent: 'flex-start',
     },
 

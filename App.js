@@ -10,6 +10,7 @@ import ProductSelection from './screens/ProductSelection'
 import ProblemSelection from './screens/ProblemSelection'
 import SelectDateTime from './screens/SelectDateTime'
 import AccountRegister from './screens/AccountRegister'
+import ProductRegister from './screens/ProductRegister'
 
 
 const Stack = createNativeStackNavigator();
@@ -17,12 +18,13 @@ const Stack = createNativeStackNavigator();
 function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator>
-        {/* <Stack.Screen name="Home" component={ServiceOption} options={{ headerShown: false }} /> */}
-        {/* <Stack.Screen name="Home" component={ProductSelection} options={{ headerShown: false }} /> */}
-        {/* <Stack.Screen name="Home" component={ProblemSelection} options={{ headerShown: false }} /> */}
-        {/* <Stack.Screen name="Home" component={SelectDateTime} options={{ headerShown: false }} /> */}
-        <Stack.Screen name="Home" component={AccountRegister} options={{ headerShown: false }} />
+      <Stack.Navigator initialRouteName="ServiceOpt">
+        <Stack.Screen name="ServiceOpt" component={ServiceOption} options={{ headerShown: false }} />
+        <Stack.Screen name="ProductSel" component={ProductSelection} options={{ headerShown: false }} />
+        {/* <Stack.Screen name="ProblemSel" component={ProblemSelection} options={{ headerShown: false }} /> */}
+        {/* <Stack.Screen name="SelectDT" component={SelectDateTime} options={{ headerShown: false }} /> */}
+        {/* <Stack.Screen name="AccRegister" component={AccountRegister} options={{ headerShown: false }} /> */}
+        {/* <Stack.Screen name="ProdRegister" component={ProductRegister} options={{ headerShown: false }} /> */}
       </Stack.Navigator>
     </NavigationContainer>
   );

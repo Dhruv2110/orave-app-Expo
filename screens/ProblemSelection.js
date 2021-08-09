@@ -6,6 +6,8 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import SelectBox from 'react-native-multi-selectbox'
 import { xorBy } from 'lodash'
 
+import Footer from '../components/Footer'
+
 export default function App() {
 
     const [selectedTeams, setSelectedTeams] = useState([])
@@ -14,69 +16,53 @@ export default function App() {
 
     const OPTIONS = [
         {
-            item: 'Juventus',
+            item: 'AMC',
             id: 1,
         },
         {
-            item: 'Real Madrid',
+            item: 'Routine Service',
             id: 2,
         },
         {
-            item: 'Barcelona',
+            item: 'Not Working',
             id: 3,
         },
         {
-            item: 'PSG',
+            item: 'Water Overﬂow',
             id: 4,
         },
         {
-            item: 'Juventus',
+            item: 'Water Taste Issue',
             id: 5,
         },
         {
-            item: 'Real Madrid',
+            item: 'Noise Problem',
             id: 6,
         },
         {
-            item: 'Barcelona',
+            item: 'MOTOR PROBLEM',
             id: 7,
         },
         {
-            item: 'PSG',
+            item: 'TOUCH NOT WORKING',
             id: 8,
         },
         {
-            item: 'Juventus',
+            item: 'HEATING PROBLEM',
             id: 9,
         },
         {
-            item: 'Real Madrid',
+            item: 'SUCTION ISSUE',
             id: 10,
         },
         {
-            item: 'Barcelona',
+            item: 'LEAKAGE ISSUE',
             id: 11,
         },
         {
-            item: 'PSG',
+            item: 'BROKEN ISSUE',
             id: 12,
-        },
-        {
-            item: 'Juventus',
-            id: 13,
-        },
-        {
-            item: 'Real Madrid',
-            id: 14,
-        },
-        {
-            item: 'Barcelona',
-            id: 15,
-        },
-        {
-            item: 'PSG',
-            id: 16,
-        },
+        }
     ]
 
     function onMultiChange() {
@@ -125,6 +111,7 @@ export default function App() {
             <TouchableOpacity onPress={onContinue} style={styles.btnCont}>
                 <Text style={{ fontSize: 20 }}>Continue {'>>'}</Text>
             </TouchableOpacity>
+            <Footer />
         </SafeAreaView >
     );
 }
@@ -134,7 +121,7 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#fff',
         alignItems: 'center',
-        // justifyContent: 'space-between',
+        justifyContent: 'space-between',
     },
     input: {
         width: '80%',
