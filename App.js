@@ -8,6 +8,8 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import ServiceOption from './screens/ServiceOption'
 import ProductSelection from './screens/ProductSelection'
 import ProblemSelection from './screens/ProblemSelection'
+import SelectDateTime from './screens/SelectDateTime'
+import AccountRegister from './screens/AccountRegister'
 
 
 const Stack = createNativeStackNavigator();
@@ -18,7 +20,9 @@ function App() {
       <Stack.Navigator>
         {/* <Stack.Screen name="Home" component={ServiceOption} options={{ headerShown: false }} /> */}
         {/* <Stack.Screen name="Home" component={ProductSelection} options={{ headerShown: false }} /> */}
-        <Stack.Screen name="Home" component={ProblemSelection} options={{ headerShown: false }} />
+        {/* <Stack.Screen name="Home" component={ProblemSelection} options={{ headerShown: false }} /> */}
+        {/* <Stack.Screen name="Home" component={SelectDateTime} options={{ headerShown: false }} /> */}
+        <Stack.Screen name="Home" component={AccountRegister} options={{ headerShown: false }} />
       </Stack.Navigator>
     </NavigationContainer>
   );

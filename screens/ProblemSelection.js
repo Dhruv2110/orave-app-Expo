@@ -1,18 +1,100 @@
 import { StatusBar } from 'expo-status-bar';
-import React, { useState } from 'react';
-import { Image, StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { Image, StyleSheet, Text, TextInput, View, ScrollView, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+
+import SelectBox from 'react-native-multi-selectbox'
+import { xorBy } from 'lodash'
 
 export default function App() {
 
-    const [color, setColor] = useState('white')
+    const [selectedTeams, setSelectedTeams] = useState([])
 
-    const check = () => {
-        if (color == 'yellow')
-            setColor('white')
-        else
-            setColor('yellow')
+    const [input, setInput] = useState(null);
+
+    const OPTIONS = [
+        {
+            item: 'Juventus',
+            id: 1,
+        },
+        {
+            item: 'Real Madrid',
+            id: 2,
+        },
+        {
+            item: 'Barcelona',
+            id: 3,
+        },
+        {
+            item: 'PSG',
+            id: 4,
+        },
+        {
+            item: 'Juventus',
+            id: 5,
+        },
+        {
+            item: 'Real Madrid',
+            id: 6,
+        },
+        {
+            item: 'Barcelona',
+            id: 7,
+        },
+        {
+            item: 'PSG',
+            id: 8,
+        },
+        {
+            item: 'Juventus',
+            id: 9,
+        },
+        {
+            item: 'Real Madrid',
+            id: 10,
+        },
+        {
+            item: 'Barcelona',
+            id: 11,
+        },
+        {
+            item: 'PSG',
+            id: 12,
+        },
+        {
+            item: 'Juventus',
+            id: 13,
+        },
+        {
+            item: 'Real Madrid',
+            id: 14,
+        },
+        {
+            item: 'Barcelona',
+            id: 15,
+        },
+        {
+            item: 'PSG',
+            id: 16,
+        },
+    ]
+
+    function onMultiChange() {
+        return (item) => setSelectedTeams(xorBy(selectedTeams, [item], 'id'))
     }
+
+    function onContinue() {
+        console.log(selectedTeams, input)
+    }
+
+    // function onInputChange() {
+    //     setInput()
+    // }
+
+    // useEffect(() => {
+    //     console.log(selectedTeams)
+    //     console.log(input)
+    // }, [selectedTeams, input])
 
     return (
         <SafeAreaView style={styles.container}>
@@ -21,46 +103,28 @@ export default function App() {
                 style={{ width: '100%', height: '10%', marginBottom: 20 }}
             />
             <Text style={{ fontSize: 20, fontWeight: '700', margin: 10 }}>Welcome to Orave Customer Care</Text>
-            <Text style={{ fontSize: 30, textDecorationLine: 'underline', margin: 10 }}>Select Service Option</Text>
-            <View style={styles.btnContainer}>
-                <View style={styles.row}>
-                    <TouchableOpacity onPress={check} style={{ ...styles.test, backgroundColor: color }}>
-                        <Text style={styles.btnText}>AMC</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={check} style={{ ...styles.test, backgroundColor: color }}>
-                        <Text style={styles.btnText}>AMC</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={check} style={{ ...styles.test, backgroundColor: color }}>
-                        <Text style={styles.btnText}>AMC</Text>
-                    </TouchableOpacity>
+            <Text style={{ fontSize: 30, textDecorationLine: 'underline', margin: 10 }}>Select Problems</Text>
 
-                </View>
-                <View style={styles.row}>
-                    <TouchableOpacity onPress={check} style={{ ...styles.test, backgroundColor: color }}>
-                        <Text style={styles.btnText}>AMC</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={check} style={{ ...styles.test, backgroundColor: color }}>
-                        <Text style={styles.btnText}>AMC</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={check} style={{ ...styles.test, backgroundColor: color }}>
-                        <Text style={styles.btnText}>AMC</Text>
-                    </TouchableOpacity>
+            <SelectBox
+                label=""
+                options={OPTIONS}
+                selectedValues={selectedTeams}
+                onMultiSelect={onMultiChange()}
+                onTapClose={onMultiChange()}
+                isMulti
+                width='90%'
+                hideInputFilter={true}
+            />
 
-                </View>
-                <View style={styles.row}>
-                    <TouchableOpacity onPress={check} style={{ ...styles.test, backgroundColor: color }}>
-                        <Text style={styles.btnText}>AMC</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={check} style={{ ...styles.test, backgroundColor: color }}>
-                        <Text style={styles.btnText}>AMC</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={check} style={{ ...styles.test, backgroundColor: color }}>
-                        <Text style={styles.btnText}>AMC</Text>
-                    </TouchableOpacity>
-
-                </View>
-
-            </View>
+            <TextInput
+                style={styles.input}
+                value={input}
+                onChangeText={setInput}
+                placeholder="Specify, If other"
+            />
+            <TouchableOpacity onPress={onContinue} style={styles.btnCont}>
+                <Text style={{ fontSize: 20 }}>Continue {'>>'}</Text>
+            </TouchableOpacity>
         </SafeAreaView >
     );
 }
@@ -72,26 +136,17 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         // justifyContent: 'space-between',
     },
-    btnContainer: {
-        alignContent: 'center',
-        justifyContent: 'center'
-    },
-    test: {
-        height: 100,
-        width: 100,
+    input: {
+        width: '80%',
+        height: 50,
+        margin: 30,
         borderWidth: 1,
-        borderRadius: 10,
-        justifyContent: 'center',
-        margin: 10
+        padding: 10,
+        borderRadius: 7
     },
-    row: {
-        flexDirection: 'row'
+    btnCont: {
+        borderWidth: 1,
+        padding: 10,
+        borderRadius: 10
     },
-    btnText: {
-        color: 'black',
-        fontSize: 20,
-        alignSelf: 'center',
-        textAlign: 'center'
-    }
-
 });
