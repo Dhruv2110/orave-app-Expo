@@ -19,11 +19,11 @@ function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName="ServiceOpt">
-        <Stack.Screen name="ServiceOpt" component={ServiceOption} options={{ headerShown: false }} />
-        <Stack.Screen name="ProductSel" component={ProductSelection} options={{ headerShown: false }} />
+        {/* <Stack.Screen name="ServiceOpt" component={ServiceOption} options={{ headerShown: false }} /> */}
+        {/* <Stack.Screen name="ProductSel" component={ProductSelection} options={{ headerShown: false }} /> */}
         {/* <Stack.Screen name="ProblemSel" component={ProblemSelection} options={{ headerShown: false }} /> */}
         {/* <Stack.Screen name="SelectDT" component={SelectDateTime} options={{ headerShown: false }} /> */}
-        {/* <Stack.Screen name="AccRegister" component={AccountRegister} options={{ headerShown: false }} /> */}
+        <Stack.Screen name="AccRegister" component={AccountRegister} options={{ headerShown: false }} />
         {/* <Stack.Screen name="ProdRegister" component={ProductRegister} options={{ headerShown: false }} /> */}
       </Stack.Navigator>
     </NavigationContainer>

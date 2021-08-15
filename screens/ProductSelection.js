@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Image, StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -7,9 +7,13 @@ import Footer from '../components/Footer'
 
 export default function App({ route, navigation }) {
 
-    const { Sid } = route.params;
-    console.log(route.params)
-    console.log(Sid)
+    const { service } = route.params;
+
+
+    const click = (id) => {
+        navigation.navigate('ProblemSel', { service, product: id })
+    }
+
 
     return (
         <SafeAreaView style={styles.container}>
@@ -21,18 +25,18 @@ export default function App({ route, navigation }) {
             <Text style={{ fontSize: 30, textDecorationLine: 'underline', margin: 20 }}>Select Product</Text>
             <View style={styles.btnContainer}>
                 <View style={styles.btncol}>
-                    <TouchableOpacity style={{ ...styles.button, backgroundColor: '#EC258F' }}>
+                    <TouchableOpacity onPress={() => click('DOMESTIC WATER PURIFIER')} style={{ ...styles.button, backgroundColor: '#EC258F' }}>
                         <Text style={styles.btnText}>DOMESTIC WATER PURIFIER</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={{ ...styles.button, backgroundColor: '#C7C4E2' }}>
+                    <TouchableOpacity onPress={() => click('COMMERCIAL WATER PURIFIER')} style={{ ...styles.button, backgroundColor: '#C7C4E2' }}>
                         <Text style={styles.btnText}>COMMERCIAL WATER PURIFIER</Text>
                     </TouchableOpacity>
                 </View>
                 <View style={styles.btncol}>
-                    <TouchableOpacity style={{ ...styles.button, backgroundColor: '#83706A' }}>
+                    <TouchableOpacity onPress={() => click('CHIMNEY HOOD')} style={{ ...styles.button, backgroundColor: '#83706A' }}>
                         <Text style={{ ...styles.btnText, color: 'white' }}>CHIMNEY HOOD</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={{ ...styles.button, backgroundColor: '#606061' }}>
+                    <TouchableOpacity onPress={() => click('ELECTRIC GEYSER')} style={{ ...styles.button, backgroundColor: '#606061' }}>
                         <Text style={{ ...styles.btnText, color: 'white' }}>
                             ELECTRIC GEYSER
                         </Text>

@@ -1,11 +1,20 @@
 import { StatusBar } from 'expo-status-bar';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Image, StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import Footer from '../components/Footer'
 
+import * as Auth from '../api/test';
+
 export default function App({ navigation }) {
+
+    useEffect(() => {
+        Auth.test({ msg: 'From app' })
+            .then(res => console.log(res.data))
+            .catch(err => console.log(err))
+    }, [])
+
     return (
         <SafeAreaView style={styles.container}>
             <Image
@@ -16,19 +25,19 @@ export default function App({ navigation }) {
             <Text style={{ fontSize: 30, textDecorationLine: 'underline', margin: 20 }}>Select Service Option</Text>
             <View style={styles.btnContainer}>
                 <View style={styles.btncol}>
-                    <TouchableOpacity onPress={() => { navigation.navigate('ProductSel', { Sid: 1 }) }} style={{ ...styles.button, backgroundColor: 'skyblue' }}>
+                    <TouchableOpacity onPress={() => { navigation.navigate('ProductSel', { service: 'Installation' }) }} style={{ ...styles.button, backgroundColor: 'skyblue' }}>
                         <Text style={styles.btnText}>INSTALLATION</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => { navigation.navigate('ProductSel', { Sid: 2 }) }} style={{ ...styles.button, backgroundColor: 'lightgreen' }}>
+                    <TouchableOpacity onPress={() => { navigation.navigate('ProductSel', { service: 'Preventive Regular Maintenance' }) }} style={{ ...styles.button, backgroundColor: 'lightgreen' }}>
                         <Text style={styles.btnText}>Preventive Regular
                             Maintenance</Text>
                     </TouchableOpacity>
                 </View>
                 <View style={styles.btncol}>
-                    <TouchableOpacity onPress={() => { navigation.navigate('ProductSel', { Sid: 3 }) }} style={{ ...styles.button, backgroundColor: 'yellow' }}>
+                    <TouchableOpacity onPress={() => { navigation.navigate('ProductSel', { service: 'Repair' }) }} style={{ ...styles.button, backgroundColor: 'yellow' }}>
                         <Text style={styles.btnText}>Repair</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => { navigation.navigate('ProductSel', { Sid: 4 }) }} style={{ ...styles.button, backgroundColor: 'lightgray' }}>
+                    <TouchableOpacity onPress={() => { navigation.navigate('ProductSel', { service: 'AMC' }) }} style={{ ...styles.button, backgroundColor: 'lightgray' }}>
                         <Text style={styles.btnText}>
                             AMC{"\n"}<Text style={{ fontSize: 15 }}>(Annual Maintenance Contract)</Text>
                         </Text>

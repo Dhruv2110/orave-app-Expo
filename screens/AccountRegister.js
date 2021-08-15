@@ -4,7 +4,13 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 import Footer from '../components/Footer'
 
-export default function App() {
+import * as Auth from '../api/test';
+
+export default function App({ route, navigation }) {
+
+    // const { service, product, problems, otherProblem } = route.params;
+    // const prevData = route.params;
+    // console.log("Final", prevData)
 
     const [fname, setFname] = useState('')
     const [lname, setLname] = useState('')
@@ -21,6 +27,11 @@ export default function App() {
 
 
     const onSave = () => {
+        var data = { fname, lname, mobile, email, state, district, zip, landmark, password }
+        // console.log(date, timeSlot)
+        Auth.test({ data })
+            .then(res => console.log(res.data))
+            .catch(err => console.log(err))
 
     }
     const onCancel = () => {

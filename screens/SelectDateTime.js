@@ -8,7 +8,13 @@ import RadioButtonRN from 'radio-buttons-react-native';
 
 import Footer from '../components/Footer'
 
-export default function App() {
+import * as Auth from '../api/test';
+
+export default function App({ route, navigation }) {
+
+    const { service, product, problems, otherProblem } = route.params;
+    // const prevData = route.params;
+    // console.log("timesel", prevData)
 
 
     const [date, setDate] = useState(new Date());
@@ -41,8 +47,14 @@ export default function App() {
     };
 
     function onContinue() {
-        console.log(date.toLocaleDateString().toString(), timeSlot)
+        var data = { service, product, problems, otherProblem, InstDate: date.toLocaleDateString().toString(), timeSlot }
+        // console.log(date, timeSlot)
+        Auth.test({ data })
+            .then(res => console.log(res.data))
+            .catch(err => console.log(err))
+        // navigation.navigate('AccRegister', { service, product, problems, otherProblem, InstDate: date.toLocaleDateString().toString(), timeSlot })
     }
+
     const onChange = (event, selectedDate) => {
         const currentDate = selectedDate || date;
         setShow(Platform.OS === 'ios');
@@ -51,7 +63,7 @@ export default function App() {
 
 
     useEffect(() => {
-        console.log(date.toLocaleDateString())
+        // console.log(date.toLocaleDateString())
     }, [date])
 
     return (
@@ -94,13 +106,13 @@ export default function App() {
                 </View> */}
                 <RadioButtonRN
                     data={colors}
-                    selectedBtn={(e) => setTimeSlot(e.id)}
+                    selectedBtn={(e) => setTimeSlot(e.label)}
                     circleSize={16}
                 />
             </View>
 
             <TouchableOpacity onPress={onContinue} style={styles.btnCont}>
-                <Text style={{ fontSize: 20 }}>Continue {'>>'}</Text>
+                <Text style={{ fontSize: 20 }}>Submit</Text>
             </TouchableOpacity>
             <Footer />
         </SafeAreaView >

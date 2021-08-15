@@ -8,11 +8,14 @@ import { xorBy } from 'lodash'
 
 import Footer from '../components/Footer'
 
-export default function App() {
+export default function App({ route, navigation }) {
 
-    const [selectedTeams, setSelectedTeams] = useState([])
+    const { service, product } = route.params;
+    // console.log("prbsel", service, product)
 
-    const [input, setInput] = useState(null);
+    const [problems, setProblems] = useState([])
+
+    const [input, setInput] = useState('');
 
     const OPTIONS = [
         {
@@ -66,11 +69,13 @@ export default function App() {
     ]
 
     function onMultiChange() {
-        return (item) => setSelectedTeams(xorBy(selectedTeams, [item], 'id'))
+        return (item) => setProblems(xorBy(problems, [item], 'id'))
     }
 
     function onContinue() {
-        console.log(selectedTeams, input)
+        // console.log({ Pid, Sid, problems, other: input })
+        navigation.navigate('SelectDT', { service, product, problems, otherProblem: input })
+        // console.log(problems, input)
     }
 
     // function onInputChange() {
@@ -94,7 +99,7 @@ export default function App() {
             <SelectBox
                 label=""
                 options={OPTIONS}
-                selectedValues={selectedTeams}
+                selectedValues={problems}
                 onMultiSelect={onMultiChange()}
                 onTapClose={onMultiChange()}
                 isMulti
