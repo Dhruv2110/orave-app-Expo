@@ -5,6 +5,8 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 
 import Footer from '../components/Footer'
 
+import * as Service from '../api/service';
+
 export default function App() {
 
     const [product, setProduct] = useState('')
@@ -33,7 +35,11 @@ export default function App() {
     };
 
     const onSave = () => {
-
+        var data = { product, model, serialNo, billNo, InstDate: date.toLocaleDateString().toString() }
+        // console.log(date, timeSlot)
+        Service.addProduct({ data })
+            .then(res => console.log(res.data))
+            .catch(err => console.log(err))
     }
     const onCancel = () => {
 
@@ -101,7 +107,7 @@ export default function App() {
                     <Text style={{ fontSize: 22, color: 'red' }}>Cancel</Text>
                 </TouchableOpacity>
                 <TouchableOpacity onPress={onSave} style={styles.btnSave}>
-                    <Text style={{ fontSize: 22, color: 'white' }}>Save</Text>
+                    <Text style={{ fontSize: 22, color: 'white' }}>Submit</Text>
                 </TouchableOpacity>
             </View>
             <Footer />

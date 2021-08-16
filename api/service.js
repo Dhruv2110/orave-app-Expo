@@ -2,12 +2,12 @@ import API from '../utils/api'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
-export const test = async (credentials) => {
+export const addService = async (credentials) => {
     // console.log("in api", credentials)
 
     return await API({
         method: 'POST',
-        url: '/signup',
+        url: '/addService',
         data: credentials,
         headers: {
             'Content-Type': 'application/json'
@@ -16,26 +16,12 @@ export const test = async (credentials) => {
 
 }
 
-export const signup = async (credentials) => {
+export const addProduct = async (credentials) => {
     // console.log("in api", credentials)
 
     return await API({
         method: 'POST',
-        url: '/signup',
-        data: credentials,
-        headers: {
-            'Content-Type': 'application/json'
-        }
-    })
-
-}
-
-export const login = async (credentials) => {
-    // console.log("in api", credentials)
-
-    return await API({
-        method: 'POST',
-        url: '/login',
+        url: '/addProduct',
         data: credentials,
         headers: {
             'Content-Type': 'application/json'

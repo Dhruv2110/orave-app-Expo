@@ -8,7 +8,7 @@ import RadioButtonRN from 'radio-buttons-react-native';
 
 import Footer from '../components/Footer'
 
-import * as Auth from '../api/test';
+import * as Service from '../api/service';
 
 export default function App({ route, navigation }) {
 
@@ -49,7 +49,7 @@ export default function App({ route, navigation }) {
     function onContinue() {
         var data = { service, product, problems, otherProblem, InstDate: date.toLocaleDateString().toString(), timeSlot }
         // console.log(date, timeSlot)
-        Auth.test({ data })
+        Service.addService({ data })
             .then(res => console.log(res.data))
             .catch(err => console.log(err))
         // navigation.navigate('AccRegister', { service, product, problems, otherProblem, InstDate: date.toLocaleDateString().toString(), timeSlot })
