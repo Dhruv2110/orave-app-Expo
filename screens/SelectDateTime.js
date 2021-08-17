@@ -2,6 +2,7 @@ import { StatusBar } from 'expo-status-bar';
 import React, { useState, useEffect } from 'react';
 import { Image, StyleSheet, Text, Button, TextInput, View, ScrollView, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import DateTimePicker from '@react-native-community/datetimepicker';
 import RadioButtonRN from 'radio-buttons-react-native';
@@ -46,8 +47,9 @@ export default function App({ route, navigation }) {
         showMode('date');
     };
 
-    function onContinue() {
-        var data = { service, product, problems, otherProblem, InstDate: date.toLocaleDateString().toString(), timeSlot }
+    async function onContinue() {
+        const userId = await AsyncStorage.getItem('@userid')
+        var data = { userId,service, product, problems, otherProblem, InstDate: date.toLocaleDateString().toString(), timeSlot }
         // console.log(date, timeSlot)
         Service.addService({ data })
             .then(res => console.log(res.data))
@@ -92,18 +94,6 @@ export default function App({ route, navigation }) {
             </View>
             <View style={styles.timeContainer}>
                 <Text style={styles.dateText}>Select Time Slot:</Text>
-                {/* <Button onPress={showDatepicker} title="Show date picker!" /> */}
-                {/* <View style={{ flexDirection: 'row' }}>
-                    <TouchableOpacity style={styles.timeSlot} onPress={showDatepicker}>
-                        <Text style={{ fontSize: 15 }}>9:00 - 12:00</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.timeSlot} onPress={showDatepicker}>
-                        <Text style={{ fontSize: 15 }}>12:00 - 3:00</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.timeSlot} onPress={showDatepicker}>
-                        <Text style={{ fontSize: 15 }}>3:00 - 6:00</Text>
-                    </TouchableOpacity>
-                </View> */}
                 <RadioButtonRN
                     data={colors}
                     selectedBtn={(e) => setTimeSlot(e.label)}
@@ -114,7 +104,7 @@ export default function App({ route, navigation }) {
             <TouchableOpacity onPress={onContinue} style={styles.btnCont}>
                 <Text style={{ fontSize: 20 }}>Submit</Text>
             </TouchableOpacity>
-            <Footer />
+            <Footer nav={navigation}/>
         </SafeAreaView >
     );
 }

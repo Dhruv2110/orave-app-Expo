@@ -116,7 +116,7 @@ export default function App({ route, navigation }) {
             <TouchableOpacity onPress={onContinue} style={styles.btnCont}>
                 <Text style={{ fontSize: 20 }}>Continue {'>>'}</Text>
             </TouchableOpacity>
-            <Footer />
+            <Footer nav={navigation}/>
         </SafeAreaView >
     );
 }

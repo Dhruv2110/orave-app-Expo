@@ -200,7 +200,7 @@ export default function App({ route, navigation }) {
                     <Text style={{ fontSize: 22, color: 'white' }}>Submit</Text>
                 </TouchableOpacity>
             </View>
-            <Footer />
+            <Footer nav={navigation} />
         </SafeAreaView>
         //{/* </ScrollView > */ }
     );

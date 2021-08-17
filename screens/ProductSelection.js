@@ -45,7 +45,7 @@ export default function App({ route, navigation }) {
 
 
             </View>
-            <Footer />
+            <Footer nav={navigation}/>
         </SafeAreaView>
     );
 }

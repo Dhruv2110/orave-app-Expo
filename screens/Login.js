@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Image, StyleSheet, Text, Button, TextInput, View, ScrollView, TouchableOpacity, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import Footer from '../components/Footer'
 
@@ -12,6 +12,17 @@ export default function App({ route, navigation }) {
     // const { service, product, problems, otherProblem } = route.params;
     // const prevData = route.params;
     // console.log("Final", prevData)
+    useEffect(() => {
+
+        const localStorage = async () => {
+
+            console.log("After Save ID", await AsyncStorage.getItem('@userid'))
+            console.log("After Save Email", await AsyncStorage.getItem('@email'))
+            console.log("After Save Name", await AsyncStorage.getItem('@name'))
+        }
+
+        //localStorage()
+    },[])
 
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('');
@@ -21,7 +32,7 @@ export default function App({ route, navigation }) {
         return re.test(String(email).toLowerCase());
     }
 
-    const onSave = () => {
+    const onSave = async () => {
 
         if (!validateEmail(email)) {
             Alert.alert(
@@ -35,11 +46,33 @@ export default function App({ route, navigation }) {
 
         else {
             var data = { email, password }
-            console.log(data)
+            // console.log(data)
             Auth.login({ data })
-                .then(res => console.log(res.data))
+                .then(async (res) => {
+                    console.log(res.data)
+                    if(res.data.code == -2)
+                    {
+                        console.log("Password Mismatch")
+                    }
+                    else if (res.data.code == -1) {
+                        console.log("Email Not Found")
+                    }
+                    else if (res.data.code == 1) {
+                        await AsyncStorage.setItem('@userid', res.data.user.id)
+                        await AsyncStorage.setItem('@email', res.data.user.email)
+                        await AsyncStorage.setItem('@name', res.data.user.name)
+                        navigation.navigate('Home')
+                    }
+                    else {
+                        console.log("Try Again")
+                    }
+                })
                 .catch(err => console.log(err))
         }
+
+        // console.log("After Save ID", await AsyncStorage.getItem('@userid'))
+        // console.log("After Save Email", await AsyncStorage.getItem('@email'))
+        // console.log("After Save Name", await AsyncStorage.getItem('@name'))
 
     }
     const onRegister = () => {
@@ -89,7 +122,7 @@ export default function App({ route, navigation }) {
             <View style={{ height: '30%' }}>
 
             </View>
-            <Footer />
+            <Footer nav={navigation}/>
         </SafeAreaView>
         //{/* </ScrollView > */ }
     );

@@ -17,7 +17,7 @@ export const signup = async (credentials) => {
 }
 
 export const login = async (credentials) => {
-    console.log("in api", credentials)
+    // console.log("in api", credentials)
 
     return await API({
         method: 'POST',
@@ -27,5 +27,4 @@ export const login = async (credentials) => {
             'Content-Type': 'application/json'
         }
     })
-
 }

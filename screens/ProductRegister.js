@@ -2,12 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { Image, StyleSheet, Text, Button, TextInput, View, ScrollView, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import Footer from '../components/Footer'
 
 import * as Service from '../api/service';
 
-export default function App() {
+export default function App({navigation}) {
 
     const [product, setProduct] = useState('')
     const [model, setModel] = useState('')
@@ -34,8 +35,9 @@ export default function App() {
         setDate(currentDate);
     };
 
-    const onSave = () => {
-        var data = { product, model, serialNo, billNo, InstDate: date.toLocaleDateString().toString() }
+    const onSave = async () => {
+        const userId = await AsyncStorage.getItem('@userid')
+        var data = { userId, product, model, serialNo, billNo, ProdInstDate: date.toLocaleDateString().toString() }
         // console.log(date, timeSlot)
         Service.addProduct({ data })
             .then(res => console.log(res.data))
@@ -110,7 +112,7 @@ export default function App() {
                     <Text style={{ fontSize: 22, color: 'white' }}>Submit</Text>
                 </TouchableOpacity>
             </View>
-            <Footer />
+            <Footer nav={navigation}/>
         </SafeAreaView >
     );
 }

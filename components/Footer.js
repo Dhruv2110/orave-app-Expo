@@ -1,26 +1,29 @@
-import React from 'react';
+import React,{useEffect} from 'react';
 import { Image, StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 
-export default function App() {
+export default function App({ nav }) {
+    // useEffect(() => {
+    //     console.log("in footer",nav.navigate)
+    // }, [])
 
 
 
     return (
         <View style={styles.container}>
-            <TouchableOpacity onPress={() => { }}>
-                <Text style={styles.text}>Home</Text>
+            <TouchableOpacity onPress={() => { nav.navigate('Home')}}>
+                <Text style={{color: 'white',fontSize: 17}}>Home</Text>
             </TouchableOpacity>
             <TouchableOpacity onPress={() => { }}>
-                <Text style={styles.text}>Products</Text>
+                <Text style={{ color: 'white', fontSize: 17}}>Products</Text>
             </TouchableOpacity>
             <TouchableOpacity onPress={() => { }}>
-                <Text style={styles.text}>Parts</Text>
+                <Text style={{ color: 'white', fontSize: 17}}>Parts</Text>
             </TouchableOpacity>
             <TouchableOpacity onPress={() => { }}>
-                <Text style={styles.text}>AMC Plans</Text>
+                <Text style={{ color: 'white', fontSize: 17}}>AMC Plans</Text>
             </TouchableOpacity >
             <TouchableOpacity onPress={() => { }}>
-                <Text style={styles.text}>Contact Us</Text>
+                <Text style={{ color: 'white', fontSize: 17}}>Contact Us</Text>
             </TouchableOpacity>
         </View>
     );
@@ -37,10 +40,5 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'space-around',
         marginTop: 10
-    },
-    text: {
-        color: 'white',
-        fontSize: 17,
-        // margin: 3
     }
 });

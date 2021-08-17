@@ -46,10 +46,13 @@ export default function App({ navigation }) {
 
 
             </View>
-            <TouchableOpacity style={styles.btnNewProduct} >
+            <View style={{height:'10%'}}>
+
+            </View>
+            {/* <TouchableOpacity style={styles.btnNewProduct} >
                 <Text style={{ alignSelf: 'center', fontSize: 17 }}>Register for New Product Warranty</Text>
-            </TouchableOpacity>
-            <Footer />
+            </TouchableOpacity> */}
+            <Footer nav={navigation}/>
         </SafeAreaView>
     );
 }
