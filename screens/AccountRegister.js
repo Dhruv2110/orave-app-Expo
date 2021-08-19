@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Image, StyleSheet, Text, Button, TextInput, View, ScrollView, TouchableOpacity, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-
 import { Picker } from '@react-native-picker/picker';
+import SnackBar from 'react-native-snackbar-component'
+import Spinner from 'react-native-loading-spinner-overlay';
 
 import Footer from '../components/Footer'
 
@@ -13,7 +14,10 @@ export default function App({ route, navigation }) {
     // const { service, product, problems, otherProblem } = route.params;
     // const prevData = route.params;
     // console.log("Final", prevData)
-
+    const [loading, setLoading] = useState(false)
+    const [snackbar, setsnackbar] = useState(false)
+    const [snackbarText, setsnackbarText] = useState("")
+    
     const [fname, setFname] = useState('')
     const [lname, setLname] = useState('')
     const [mobile, setMobile] = useState('')
@@ -36,29 +40,63 @@ export default function App({ route, navigation }) {
 
     }
 
-    const onSave = () => {
+    const onSave = async () => {
 
-        if (!validateEmail(email)) {
-            Alert.alert(
-                "",
-                "Enter Valid Email Address",
-                [
-                    { text: "OK", onPress: () => console.log("OK Pressed") }
-                ]
-            );
+        // console.log("In save")
+        if (fname == '' || lname == '' || mobile == '' || state == '' || district == '' || zip == '' || landmark == '' || password == '') {
+            setsnackbarText("Enter All Fields")
+            setsnackbar(true)
         }
-
+        else if (password != cnfPassword) {
+            setsnackbarText("Password Mismatch")
+            setsnackbar(true)
+        }
+        else if (!validateEmail(email)) {
+            setsnackbarText("Enter Valid Email")
+            setsnackbar(true)
+        }
         else {
+            setLoading(true)
             var data = { fname, lname, mobile, email, state, district, zip, landmark, password }
             // console.log(date, timeSlot)
-            Auth.signup({ data })
-                .then(res => console.log(res.data))
-                .catch(err => console.log(err))
+            await Auth.signup({ data })
+                .then(async (res) => {
+                    console.log(res.data)
+                    if (res.data.code == -1) {
+                        setLoading(false)
+                        setsnackbarText("Email Already Exists")
+                        setsnackbar(true)
+                        // console.log("Email Not Found")
+                    }
+                    else if (res.data.code == -2) {
+                        setLoading(false)
+                        setsnackbarText("Mobile No. Already Exists")
+                        setsnackbar(true)
+                        // console.log("Email Not Found")
+                    }
+                    else if (res.data.code == 1) {
+                        setLoading(false)
+                        setsnackbarText("Registered Successfully")
+                        setsnackbar(true)
+                        navigation.navigate('Login')
+                    }
+                    else {
+                        setLoading(false)
+                        setsnackbarText("Please Try Again")
+                        setsnackbar(true)
+                        // console.log("Try Again")
+                    }
+                })
+                .catch(err => {
+                    setLoading(false)
+                    setsnackbarText("Please Try Again")
+                    setsnackbar(true)
+                })
         }
 
     }
     const onCancel = () => {
-
+        navigation.navigate('Login')
     }
 
     useEffect(() => {
@@ -68,6 +106,19 @@ export default function App({ route, navigation }) {
     return (
         // <ScrollView contentContainerStyle={styles.container}>
         <SafeAreaView style={styles.container}>
+            <Spinner
+                visible={loading}
+                textContent={'Please Wait...'}
+                textStyle={{ color: '#FFF' }}
+            />
+            <SnackBar visible={snackbar}
+                bottom={30}
+                containerStyle={{ width: '90%', marginHorizontal: 20, borderRadius: 10 }}
+                autoHidingTime={0}
+                textMessage={snackbarText}
+                actionHandler={() => setsnackbar(false)}
+                actionText="OK"
+                accentColor='#ff9933' />
             <Image
                 source={require('../assets/header.png')}
                 style={{ width: '100%', height: '10%', marginBottom: 15 }}
@@ -159,7 +210,7 @@ export default function App({ route, navigation }) {
                         <TextInput
                             style={styles.input2}
                             value={district}
-                            onChangeText={setDistrict}
+                            onChangeText={e => setDistrict(e.trim())}
                             placeholder="*District"
                         />
                         <TextInput
@@ -174,32 +225,34 @@ export default function App({ route, navigation }) {
                     <TextInput
                         style={styles.input}
                         value={landmark}
-                        onChangeText={setLandmark}
+                        onChangeText={e => setLandmark(e.trim())}
                         placeholder="*Landmark"
                     />
                     <TextInput
                         style={styles.input}
                         value={password}
-                        onChangeText={setPassword}
+                        onChangeText={e => setPassword(e.trim())}
                         placeholder="*Password"
+                        secureTextEntry={true}
                     />
                     <TextInput
                         style={styles.input}
                         value={cnfPassword}
-                        onChangeText={setCnfPassword}
+                        onChangeText={e => setCnfPassword(e.trim())}
                         placeholder="*Confirm Password"
+                        secureTextEntry={true}
                     />
 
                 </View>
-            </ScrollView>
-            <View style={styles.btnContainer}>
-                <TouchableOpacity onPress={onCancel} style={styles.btnCancel}>
-                    <Text style={{ fontSize: 22, color: 'red' }}>Cancel</Text>
-                </TouchableOpacity>
+            
+                
                 <TouchableOpacity onPress={onSave} style={styles.btnSave}>
-                    <Text style={{ fontSize: 22, color: 'white' }}>Submit</Text>
+                    <Text style={{ fontSize: 20, color: 'white' }}>Submit</Text>
                 </TouchableOpacity>
-            </View>
+            <TouchableOpacity onPress={onCancel} style={styles.btnLogin}>
+                <Text style={{ fontSize: 15, color: 'blue' }}>Click Here to Login</Text>
+            </TouchableOpacity>
+            </ScrollView>
             <Footer nav={navigation} />
         </SafeAreaView>
         //{/* </ScrollView > */ }
@@ -244,45 +297,24 @@ const styles = StyleSheet.create({
         borderRadius: 7,
         justifyContent: 'center'
     },
-    dateContainer: {
-        width: "90%",
-        height: 40,
-        margin: 10,
-        marginBottom: 50,
-    },
-    dateText: {
-        fontSize: 25,
-        textAlign: 'left'
-    },
-    Calender: {
-        borderWidth: 1,
-        width: '30%',
-        height: 40,
-        padding: 5,
-        margin: 5,
-        borderRadius: 5,
-        //borderColor: '#43A7D3',
-    },
     btnContainer: {
         width: '95%',
         flexDirection: 'row',
         // alignContent: 'space-between'
         justifyContent: 'space-evenly'
     },
-    btnCancel: {
+    btnLogin: {
         width: '40%',
         // margin: 50,
-        borderWidth: 1,
-        padding: 10,
-        borderRadius: 30,
+        padding: 5,
         alignItems: 'center',
         borderColor: 'red'
     },
     btnSave: {
         // margin: 50,
-        width: '40%',
+        width: '35%',
         //borderWidth: 1,
-        padding: 10,
+        padding: 5,
         borderRadius: 30,
         alignItems: 'center',
         backgroundColor: '#43BE72'

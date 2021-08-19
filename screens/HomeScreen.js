@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Image, StyleSheet, Text, Button, TextInput, View, ScrollView, TouchableOpacity, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { FontAwesome5 } from '@expo/vector-icons';
+import { FontAwesome5, MaterialIcons  } from '@expo/vector-icons';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -20,9 +20,10 @@ export default function App({ route, navigation }) {
 
 
     const checkUser = async () => {
-        
-        if (!user) {
-            navigation.navigate('Login')
+        const userId = await AsyncStorage.getItem('@userid')
+        // console.log(userId)
+        if (userId == null) {
+            navigation.push('Login')
         }
         else {
             const userName = await AsyncStorage.getItem('@name')
@@ -31,7 +32,6 @@ export default function App({ route, navigation }) {
     }
 
     useEffect(() => {
-
         checkUser()
         // console.log(navigation)
     }, [])
@@ -50,13 +50,16 @@ export default function App({ route, navigation }) {
                 </Text>
             </View>
             <TouchableOpacity onPress={() => { navigation.navigate('ServiceOpt')}} style={styles.btnSave}>
-                <Text style={{ fontSize: 20, color: 'white' }}>New Service Request</Text>
+                <MaterialIcons name="miscellaneous-services" size={26} color="white" />
+                <Text style={{ fontSize: 20, color: 'white', alignSelf: 'flex-start', marginLeft:7 }}>New Service Request</Text>
             </TouchableOpacity>
             <TouchableOpacity onPress={() => { navigation.navigate('ProdRegister')}} style={styles.btnSave}>
-                <Text style={{ fontSize: 20, color: 'white' }}>New Product Registration</Text>
+                <MaterialIcons name="electrical-services" size={26} color="white" />
+                <Text style={{ fontSize: 20, color: 'white', alignSelf: 'flex-start', marginLeft: 7   }}>New Product Registration</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => { }} style={styles.btnSave}>
-                <Text style={{ fontSize: 20, color: 'white' }}>Previous Service Requests</Text>
+            <TouchableOpacity onPress={() => { navigation.navigate('History') }} style={styles.btnSave}>
+                <FontAwesome5 name="list-alt" size={26} color="white" />
+                <Text style={{ fontSize: 20, color: 'white', alignSelf: 'flex-start', marginLeft: 7   }}>Previous Service Requests</Text>
             </TouchableOpacity>
             <View style={{height:'25%'}}>
 
@@ -81,8 +84,9 @@ const styles = StyleSheet.create({
         // justifyContent: 'flex-start',
     },
     btnSave: {
+        flexDirection:'row',
         // margin: 50,
-        width: '70%',
+        width: '75%',
         //borderWidth: 1,
         padding: 10,
         borderRadius: 10,

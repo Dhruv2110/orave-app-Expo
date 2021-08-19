@@ -1,14 +1,20 @@
 import React, { useState, useEffect } from 'react';
-import { Image, StyleSheet, Text, Button, TextInput, View, ScrollView, TouchableOpacity } from 'react-native';
+import { Image, StyleSheet, Text, TextInput, View, ScrollView, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import SnackBar from 'react-native-snackbar-component';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 import Footer from '../components/Footer'
 
 import * as Service from '../api/service';
 
 export default function App({navigation}) {
+
+    const [loading, setLoading] = useState(false)
+    const [snackbar, setsnackbar] = useState(false)
+    const [snackbarText, setsnackbarText] = useState("")
 
     const [product, setProduct] = useState('')
     const [model, setModel] = useState('')
@@ -36,12 +42,47 @@ export default function App({navigation}) {
     };
 
     const onSave = async () => {
-        const userId = await AsyncStorage.getItem('@userid')
-        var data = { userId, product, model, serialNo, billNo, ProdInstDate: date.toLocaleDateString().toString() }
-        // console.log(date, timeSlot)
-        Service.addProduct({ data })
-            .then(res => console.log(res.data))
-            .catch(err => console.log(err))
+        if (product == '' || model == '' || serialNo == '' || billNo == '') {
+            setsnackbarText("Enter All Fields")
+            setsnackbar(true)
+        }
+        else {
+            setLoading(true)
+            const userId = await AsyncStorage.getItem('@userid')
+            var data = { userId, product, model, serialNo, billNo, ProdInstDate: date.toLocaleDateString().toString() }
+            // console.log(date, timeSlot)
+            await Service.addProduct({ data })
+                .then(async (res) => {
+                    console.log(res.data)
+                    if (res.data.code == 1) {
+                        setLoading(false)
+                        setsnackbarText("Product Registered Successfully")
+                        setsnackbar(true)
+                    }
+                    else if (res.data.code == -2) {
+                        setLoading(false)
+                        setsnackbarText("Serial No Already Exists")
+                        setsnackbar(true)
+                    }
+                    else if (res.data.code == -3) {
+                        setLoading(false)
+                        setsnackbarText("Bill No Already Exists")
+                        setsnackbar(true)
+                    }
+                    else {
+                        setLoading(false)
+                        setsnackbarText("Please Try Again")
+                        setsnackbar(true)
+                        // console.log("Try Again")
+                    }
+                })
+                .catch(err => {
+                    setLoading(false)
+                    setsnackbarText("Some Error")
+                    setsnackbar(true)
+                })
+        }
+        
     }
     const onCancel = () => {
 
@@ -53,6 +94,19 @@ export default function App({navigation}) {
 
     return (
         <SafeAreaView style={styles.container}>
+            <Spinner
+                visible={loading}
+                textContent={'Please Wait...'}
+                textStyle={{ color: '#FFF' }}
+            />
+            <SnackBar visible={snackbar}
+                bottom={30}
+                containerStyle={{ width: '90%', marginHorizontal: 20, borderRadius: 10 }}
+                autoHidingTime={0}
+                textMessage={snackbarText}
+                actionHandler={() => setsnackbar(false)}
+                actionText="OK"
+                accentColor='#ff9933' />
             <Image
                 source={require('../assets/header.png')}
                 style={{ width: '100%', height: '10%', marginBottom: 20 }}

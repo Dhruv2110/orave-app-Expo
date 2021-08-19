@@ -1,11 +1,12 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useState, useEffect } from 'react';
-import { Image, StyleSheet, Text, Button, TextInput, View, ScrollView, TouchableOpacity } from 'react-native';
+import { Image, StyleSheet, Text, Button, TextInput, View, ScrollView, TouchableOpacity, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
 import DateTimePicker from '@react-native-community/datetimepicker';
+import SnackBar from 'react-native-snackbar-component';
 import RadioButtonRN from 'radio-buttons-react-native';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 import Footer from '../components/Footer'
 
@@ -17,6 +18,10 @@ export default function App({ route, navigation }) {
     // const prevData = route.params;
     // console.log("timesel", prevData)
 
+    const [loading, setLoading] = useState(false)
+
+    const [snackbar, setsnackbar] = useState(false)
+    const [snackbarText, setsnackbarText] = useState("")
 
     const [date, setDate] = useState(new Date());
     const [mode, setMode] = useState('date');
@@ -47,13 +52,69 @@ export default function App({ route, navigation }) {
         showMode('date');
     };
 
+    const onSubmit = () => {
+        const getDay = date.getDay()
+        console.log(getDay)
+        if(getDay == 0 || getDay == 6) {
+            setsnackbarText("Not available on Saturday and Sunday")
+            setsnackbar(true)
+        }
+        else {
+            Alert.alert(
+                "Are your sure?",
+                "Are you sure you want to submit service request?",
+                [
+                    // The "Yes" button
+                    {
+                        text: "Yes",
+                        onPress: () => {
+                            onContinue();
+                        },
+                    },
+                    // The "No" button
+                    // Does nothing but dismiss the dialog when tapped
+                    {
+                        text: "No",
+                    },
+                ]
+            );
+        }
+        
+    }
+
     async function onContinue() {
+        
+        setLoading(true)
         const userId = await AsyncStorage.getItem('@userid')
         var data = { userId,service, product, problems, otherProblem, InstDate: date.toLocaleDateString().toString(), timeSlot }
         // console.log(date, timeSlot)
         Service.addService({ data })
-            .then(res => console.log(res.data))
-            .catch(err => console.log(err))
+            .then(async (res) => {
+                console.log(res.data)
+                if (res.data.code == -3) {
+                    setLoading(false)
+                    setsnackbarText("Submitted Successfully.Email Not Sent")
+                    setsnackbar(true)
+                    // console.log("Email Not Found")
+                }
+                else if (res.data.code == 1) {
+                    setLoading(false)
+                    setsnackbarText("Submitted Successfully.Email Sent")
+                    setsnackbar(true)
+                    // navigation.navigate('Login')
+                }
+                else {
+                    setLoading(false)
+                    setsnackbarText("Please Try Again")
+                    setsnackbar(true)
+                    // console.log("Try Again")
+                }
+            })
+            .catch(err => {
+                setLoading(false)
+                setsnackbarText("Please Try Again")
+                setsnackbar(true)
+            })
         // navigation.navigate('AccRegister', { service, product, problems, otherProblem, InstDate: date.toLocaleDateString().toString(), timeSlot })
     }
 
@@ -70,6 +131,19 @@ export default function App({ route, navigation }) {
 
     return (
         <SafeAreaView style={styles.container}>
+            <Spinner
+                visible={loading}
+                textContent={'Please Wait...'}
+                textStyle={{ color: '#FFF' }}
+            />
+            <SnackBar visible={snackbar}
+                bottom={30}
+                containerStyle={{ width: '90%', marginHorizontal: 20, borderRadius: 10 }}
+                autoHidingTime={0}
+                textMessage={snackbarText}
+                actionHandler={() => setsnackbar(false)}
+                actionText="OK"
+                accentColor='#ff9933' />
             <Image
                 source={require('../assets/header.png')}
                 style={{ width: '100%', height: '10%', marginBottom: 20 }}
@@ -101,7 +175,7 @@ export default function App({ route, navigation }) {
                 />
             </View>
 
-            <TouchableOpacity onPress={onContinue} style={styles.btnCont}>
+            <TouchableOpacity onPress={onSubmit} style={styles.btnCont}>
                 <Text style={{ fontSize: 20 }}>Submit</Text>
             </TouchableOpacity>
             <Footer nav={navigation}/>

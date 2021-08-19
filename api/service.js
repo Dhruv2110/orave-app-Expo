@@ -29,3 +29,17 @@ export const addProduct = async (credentials) => {
     })
 
 }
+
+export const getAllServices = async (credentials) => {
+    // console.log("in api", credentials)
+
+    return await API({
+        method: 'POST',
+        url: '/getAllServices',
+        data: credentials,
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+
+}

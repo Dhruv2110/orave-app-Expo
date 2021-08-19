@@ -113,6 +113,9 @@ export default function App({ route, navigation }) {
                 onChangeText={setInput}
                 placeholder="Specify, If other"
             />
+            <View style={{height:'20%'}}>
+
+            </View>
             <TouchableOpacity onPress={onContinue} style={styles.btnCont}>
                 <Text style={{ fontSize: 20 }}>Continue {'>>'}</Text>
             </TouchableOpacity>

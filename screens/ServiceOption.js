@@ -10,9 +10,9 @@ import * as Auth from '../api/test';
 export default function App({ navigation }) {
 
     useEffect(() => {
-        Auth.test({ msg: 'From app' })
-            .then(res => console.log(res.data))
-            .catch(err => console.log(err))
+        // Auth.test({ msg: 'From app' })
+        //     .then(res => console.log(res.data))
+        //     .catch(err => console.log(err))
     }, [])
 
     return (

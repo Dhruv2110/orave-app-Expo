@@ -13,6 +13,7 @@ import ProblemSelection from './screens/ProblemSelection'
 import SelectDateTime from './screens/SelectDateTime'
 import AccountRegister from './screens/AccountRegister'
 import ProductRegister from './screens/ProductRegister'
+import RequestHistory from './screens/RequestHistory'
 
 
 const Stack = createNativeStackNavigator();
@@ -20,7 +21,7 @@ const Stack = createNativeStackNavigator();
 function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Home">
+      <Stack.Navigator initialRouteName="Login">
         <Stack.Screen name="Home" component={HomeScreen} options={{ headerShown: false }} />
         <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
         <Stack.Screen name="ServiceOpt" component={ServiceOption} options={{ headerShown: false }} />
@@ -29,6 +30,7 @@ function App() {
         <Stack.Screen name="SelectDT" component={SelectDateTime} options={{ headerShown: false }} />
         <Stack.Screen name="AccRegister" component={AccountRegister} options={{ headerShown: false }} />
         <Stack.Screen name="ProdRegister" component={ProductRegister} options={{ headerShown: false }} />
+        <Stack.Screen name="History" component={RequestHistory} options={{ headerShown: false }} />
       </Stack.Navigator>
     </NavigationContainer>
   );

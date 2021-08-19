@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Image, StyleSheet, Text, Button, TextInput, View, ScrollView, TouchableOpacity, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import SnackBar from 'react-native-snackbar-component';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 import Footer from '../components/Footer'
 
@@ -12,6 +14,14 @@ export default function App({ route, navigation }) {
     // const { service, product, problems, otherProblem } = route.params;
     // const prevData = route.params;
     // console.log("Final", prevData)
+    const [loading, setLoading] = useState(false)
+
+    const [snackbar, setsnackbar] = useState(false)
+    const [snackbarText, setsnackbarText] = useState("")
+
+    const [email, setEmail] = useState('')
+    const [password, setPassword] = useState('');
+
     useEffect(() => {
 
         const localStorage = async () => {
@@ -20,31 +30,52 @@ export default function App({ route, navigation }) {
             console.log("After Save Email", await AsyncStorage.getItem('@email'))
             console.log("After Save Name", await AsyncStorage.getItem('@name'))
         }
+        const checkUser = async () => {
+            const userId = await AsyncStorage.getItem('@userid')
+            console.log(userId)
+            if (userId) {
+                navigation.push('Home')
+            }
+        }
+        // async function getUser() {
+        //     var user = await AsyncStorage.getItem('@userid')
+        //     // console.log("User", user)
+        //     if (user != null) navigation.push('HomeScreen')
+        //     // return user
+        // }
 
-        //localStorage()
+        // getUser()
+        checkUser()
+
     },[])
 
-    const [email, setEmail] = useState('')
-    const [password, setPassword] = useState('');
+
 
     const validateEmail = (email) => {
         const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
         return re.test(String(email).toLowerCase());
     }
 
-    const onSave = async () => {
+    const onSave = () => {
 
         if (!validateEmail(email)) {
-            Alert.alert(
-                "",
-                "Enter Valid Email Address",
-                [
-                    { text: "OK", onPress: () => console.log("OK Pressed") }
-                ]
-            );
+            // Alert.alert(
+            //     "",
+            //     "Enter Valid Email Address",
+            //     [
+            //         { text: "OK", onPress: () => console.log("OK Pressed") }
+            //     ]
+            // );
+            setsnackbarText("Enter Valid Email")
+            setsnackbar(true)
         }
 
+        else if(!password) {
+            setsnackbarText("Enter Password")
+            setsnackbar(true)
+        }
         else {
+            setLoading(true)
             var data = { email, password }
             // console.log(data)
             Auth.login({ data })
@@ -52,22 +83,36 @@ export default function App({ route, navigation }) {
                     console.log(res.data)
                     if(res.data.code == -2)
                     {
-                        console.log("Password Mismatch")
+                        setLoading(false)
+                        setsnackbarText("Wrong Password")
+                        setsnackbar(true)
+                        // console.log("Password Mismatch")
                     }
                     else if (res.data.code == -1) {
-                        console.log("Email Not Found")
+                        setLoading(false)
+                        setsnackbarText("User Not Registered")
+                        setsnackbar(true)
+                        // console.log("Email Not Found")
                     }
                     else if (res.data.code == 1) {
                         await AsyncStorage.setItem('@userid', res.data.user.id)
                         await AsyncStorage.setItem('@email', res.data.user.email)
                         await AsyncStorage.setItem('@name', res.data.user.name)
+                        setLoading(false)
                         navigation.navigate('Home')
                     }
                     else {
-                        console.log("Try Again")
+                        setLoading(false)
+                        setsnackbarText("Please Try Again")
+                        setsnackbar(true)
+                        // console.log("Try Again")
                     }
                 })
-                .catch(err => console.log(err))
+                .catch(err => {
+                    setLoading(false)
+                    setsnackbarText("Please Try Again")
+                    setsnackbar(true)
+                })
         }
 
         // console.log("After Save ID", await AsyncStorage.getItem('@userid'))
@@ -86,6 +131,19 @@ export default function App({ route, navigation }) {
     return (
         // <ScrollView contentContainerStyle={styles.container}>
         <SafeAreaView style={styles.container}>
+            <Spinner
+                visible={loading}
+                textContent={'Signing In...'}
+                textStyle={{ color: '#FFF' }}
+            />
+            <SnackBar visible={snackbar}
+                bottom={30}
+                containerStyle={{ width: '90%', marginHorizontal: 20, borderRadius: 10 }}
+                autoHidingTime={0}
+                textMessage={snackbarText}
+                actionHandler={() => setsnackbar(false)}
+                actionText="OK"
+                accentColor='#ff9933' />
             <Image
                 source={require('../assets/header.png')}
                 style={{ width: '100%', height: '10%', marginBottom: 15 }}
@@ -108,6 +166,8 @@ export default function App({ route, navigation }) {
                     value={password}
                     onChangeText={e => setPassword(e.trim())}
                     placeholder="*Password"
+                    secureTextEntry={true}
+                    
                 />
             </View>
             <TouchableOpacity onPress={onSave} style={styles.btnSave}>
