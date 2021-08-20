@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Image, StyleSheet, Text, Button, Pressable, View, ScrollView, TouchableOpacity, Alert, Modal } from 'react-native';
+import { Image, StyleSheet, Text, RefreshControl, Pressable, View, ScrollView, TouchableOpacity, Alert, Modal } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { FontAwesome5 } from '@expo/vector-icons';
 
@@ -15,15 +15,14 @@ import { forEach } from 'lodash';
 
 export default function App({ route, navigation }) {
 
-    // const { service, product, problems, otherProblem } = route.params;
-    // const prevData = route.params;
-    // console.log("Final", prevData)
 
     const [user, setUser] = useState('User')
     const [userId, setUserId] = useState(null)
 
     const [modalVisible, setModalVisible] = useState(false);
     const [modalText, setModalText] = useState("Hello");
+
+    const [refreshing, setRefreshing] = useState(false);
 
     const [data,setData] = useState([])
 
@@ -57,6 +56,12 @@ export default function App({ route, navigation }) {
         //getHistory()
         // console.log(navigation)
     }, [])
+
+    const onRefresh = () => {
+        setRefreshing(true);
+        checkUser()
+        setRefreshing(false);
+    };
 
     const ListCard = ({ ID, reqDate}) => {
         //console.log(data)
@@ -93,6 +98,8 @@ export default function App({ route, navigation }) {
                     <Text style={{ fontSize: 25, margin: 10, alignSelf: 'center'}}>
                         Service Request History
                     </Text>
+                    <Text style={{ fontSize: 15, fontStyle: 'italic',textAlign:'center' }}>(Pull to refresh)</Text>
+
                 </View>
                 {/* <Modal
                     animationType="slide"
@@ -116,7 +123,13 @@ export default function App({ route, navigation }) {
                         </View>
                     </View>
                 </Modal> */}
-                <ScrollView style={styles.scroll}>
+                <ScrollView style={styles.scroll} refreshControl={
+                    <RefreshControl
+                        refreshing={refreshing}
+                        onRefresh={onRefresh}
+                    />
+                }>
+                    
                     {data.map((item) => <ListCard key={item._id} ID={item._id} reqDate={item.createdAt} />)}
                     {/* <ListCard />
                     <ListCard />

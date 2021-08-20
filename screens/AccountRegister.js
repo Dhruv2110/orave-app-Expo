@@ -55,9 +55,17 @@ export default function App({ route, navigation }) {
             setsnackbarText("Enter Valid Email")
             setsnackbar(true)
         }
+        else if(mobile.length != 10) {
+            setsnackbarText("Mobile No. Must Be of 10 Digit")
+            setsnackbar(true)
+        }
+        else if(zip.length != 6) {
+            setsnackbarText("Pincode Must Be of 6 Digit")
+            setsnackbar(true)
+        }
         else {
             setLoading(true)
-            var data = { fname, lname, mobile, email, state, district, zip, landmark, password }
+            var data = { fname, lname, mobile, email: email.toLowerCase(), state, district, zip, landmark, password }
             // console.log(date, timeSlot)
             await Auth.signup({ data })
                 .then(async (res) => {
@@ -76,7 +84,7 @@ export default function App({ route, navigation }) {
                     }
                     else if (res.data.code == 1) {
                         setLoading(false)
-                        setsnackbarText("Registered Successfully")
+                        setsnackbarText("Registered Successfully.Please Login")
                         setsnackbar(true)
                         navigation.navigate('Login')
                     }
@@ -112,7 +120,7 @@ export default function App({ route, navigation }) {
                 textStyle={{ color: '#FFF' }}
             />
             <SnackBar visible={snackbar}
-                bottom={30}
+                bottom={70}
                 containerStyle={{ width: '90%', marginHorizontal: 20, borderRadius: 10 }}
                 autoHidingTime={0}
                 textMessage={snackbarText}

@@ -59,7 +59,7 @@ export default function App({ route, navigation }) {
             </TouchableOpacity>
             <TouchableOpacity onPress={() => { navigation.navigate('History') }} style={styles.btnSave}>
                 <FontAwesome5 name="list-alt" size={26} color="white" />
-                <Text style={{ fontSize: 20, color: 'white', alignSelf: 'flex-start', marginLeft: 7   }}>Previous Service Requests</Text>
+                <Text style={{ fontSize: 20, color: 'white', alignSelf: 'flex-start', marginLeft: 7   }}>View Previous Requests</Text>
             </TouchableOpacity>
             <View style={{height:'25%'}}>
 
@@ -91,7 +91,12 @@ const styles = StyleSheet.create({
         padding: 10,
         borderRadius: 10,
         alignItems: 'center',
-        backgroundColor: '#43BE72'
+        backgroundColor: '#43BE72',
+        elevation: 20,
+        shadowColor: 'rgba(0,0,0, .4)', // IOS
+        shadowOffset: { height: 1, width: 0 }, // IOS
+        shadowOpacity: 1, // IOS
+        shadowRadius: 1, //IOS
     },
     btnLogout: {
         flexDirection:'row',
@@ -102,6 +107,11 @@ const styles = StyleSheet.create({
         padding: 7,
         borderRadius: 10,
         alignItems: 'center',
-        backgroundColor: 'red'
+        backgroundColor: 'red',
+        elevation: 20,
+        shadowColor: 'rgba(0,0,0, .4)', // IOS
+        shadowOffset: { height: 1, width: 0 }, // IOS
+        shadowOpacity: 1, // IOS
+        shadowRadius: 1, //IOS
     },
 });

@@ -137,7 +137,7 @@ export default function App({ route, navigation }) {
                 textStyle={{ color: '#FFF' }}
             />
             <SnackBar visible={snackbar}
-                bottom={30}
+                bottom={70}
                 containerStyle={{ width: '90%', marginHorizontal: 20, borderRadius: 10 }}
                 autoHidingTime={0}
                 textMessage={snackbarText}

@@ -2,6 +2,7 @@ import { StatusBar } from 'expo-status-bar';
 import React, { useState, useEffect } from 'react';
 import { Image, StyleSheet, Text, TextInput, View, ScrollView, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import SnackBar from 'react-native-snackbar-component'
 
 import SelectBox from 'react-native-multi-selectbox'
 import { xorBy } from 'lodash'
@@ -17,29 +18,32 @@ export default function App({ route, navigation }) {
 
     const [input, setInput] = useState('');
 
+    const [snackbar, setsnackbar] = useState(false)
+    const [snackbarText, setsnackbarText] = useState("")
+
     const OPTIONS = [
         {
-            item: 'AMC',
+            item: 'Installation',
             id: 1,
         },
         {
-            item: 'Routine Service',
+            item: 'AMC',
             id: 2,
         },
         {
-            item: 'Not Working',
+            item: 'Routine Service',
             id: 3,
         },
         {
-            item: 'Water Overﬂow',
+            item: 'Not Working',
             id: 4,
         },
         {
-            item: 'Water Taste Issue',
+            item: 'Water Overﬂow',
             id: 5,
         },
         {
-            item: 'Noise Problem',
+            item: 'Water Taste Issue',
             id: 6,
         },
         {
@@ -65,6 +69,10 @@ export default function App({ route, navigation }) {
         {
             item: 'BROKEN ISSUE',
             id: 12,
+        },
+        {
+            item: 'Noise Problem',
+            id: 13,
         }
     ]
 
@@ -73,39 +81,45 @@ export default function App({ route, navigation }) {
     }
 
     function onContinue() {
+        if(problems.length == 0 && input == '') {
+            setsnackbarText("Select or Enter Atleast 1 Problem")
+            setsnackbar(true)
+        }
+        else {
+
+            navigation.navigate('SelectDT', { service, product, problems, otherProblem: input })
+        }
         // console.log({ Pid, Sid, problems, other: input })
-        navigation.navigate('SelectDT', { service, product, problems, otherProblem: input })
         // console.log(problems, input)
     }
 
-    // function onInputChange() {
-    //     setInput()
-    // }
-
-    // useEffect(() => {
-    //     console.log(selectedTeams)
-    //     console.log(input)
-    // }, [selectedTeams, input])
 
     return (
         <SafeAreaView style={styles.container}>
             <Image
                 source={require('../assets/header.png')}
-                style={{ width: '100%', height: '10%', marginBottom: 20 }}
+                style={{ width: '100%', height: '10%' }}
             />
-            <Text style={{ fontSize: 20, fontWeight: '700', margin: 10 }}>Welcome to Orave Customer Care</Text>
-            <Text style={{ fontSize: 30, textDecorationLine: 'underline', margin: 10 }}>Select Problems</Text>
-
-            <SelectBox
-                label=""
-                options={OPTIONS}
-                selectedValues={problems}
-                onMultiSelect={onMultiChange()}
-                onTapClose={onMultiChange()}
-                isMulti
-                width='90%'
-                hideInputFilter={true}
-            />
+            <SnackBar visible={snackbar}
+                bottom={70}
+                containerStyle={{ width: '90%', marginHorizontal: 20, borderRadius: 10 }}
+                autoHidingTime={0}
+                textMessage={snackbarText}
+                actionHandler={() => setsnackbar(false)}
+                actionText="OK"
+                accentColor='#ff9933' />
+            <Text style={{ fontSize: 20, fontWeight: '700' }}>Welcome to Orave Customer Care</Text>
+            <Text style={{ fontSize: 30, textDecorationLine: 'underline' }}>Select Problems</Text>
+                <SelectBox
+                    label=""
+                    options={OPTIONS}
+                    selectedValues={problems}
+                    onMultiSelect={onMultiChange()}
+                    onTapClose={onMultiChange()}
+                    isMulti
+                    width='90%'
+                    hideInputFilter={true}
+                />
 
             <TextInput
                 style={styles.input}
@@ -113,12 +127,12 @@ export default function App({ route, navigation }) {
                 onChangeText={setInput}
                 placeholder="Specify, If other"
             />
-            <View style={{height:'20%'}}>
-
-            </View>
             <TouchableOpacity onPress={onContinue} style={styles.btnCont}>
                 <Text style={{ fontSize: 20 }}>Continue {'>>'}</Text>
             </TouchableOpacity>
+            <View style={{ height: '10%' }}>
+
+            </View>
             <Footer nav={navigation}/>
         </SafeAreaView >
     );
@@ -132,9 +146,9 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
     },
     input: {
-        width: '80%',
+        width: '85%',
         height: 50,
-        margin: 30,
+        margin: 10,
         borderWidth: 1,
         padding: 10,
         borderRadius: 7

@@ -37,14 +37,7 @@ export default function App({ route, navigation }) {
                 navigation.push('Home')
             }
         }
-        // async function getUser() {
-        //     var user = await AsyncStorage.getItem('@userid')
-        //     // console.log("User", user)
-        //     if (user != null) navigation.push('HomeScreen')
-        //     // return user
-        // }
 
-        // getUser()
         checkUser()
 
     },[])
@@ -76,7 +69,7 @@ export default function App({ route, navigation }) {
         }
         else {
             setLoading(true)
-            var data = { email, password }
+            var data = { email: email.toLowerCase(), password }
             // console.log(data)
             Auth.login({ data })
                 .then(async (res) => {
@@ -137,7 +130,7 @@ export default function App({ route, navigation }) {
                 textStyle={{ color: '#FFF' }}
             />
             <SnackBar visible={snackbar}
-                bottom={30}
+                bottom={70}
                 containerStyle={{ width: '90%', marginHorizontal: 20, borderRadius: 10 }}
                 autoHidingTime={0}
                 textMessage={snackbarText}

@@ -94,6 +94,10 @@ export default function App({navigation}) {
 
     return (
         <SafeAreaView style={styles.container}>
+            <Image
+                source={require('../assets/header.png')}
+                style={{ width: '100%', height: '10%', marginBottom: 20 }}
+            />
             <Spinner
                 visible={loading}
                 textContent={'Please Wait...'}
@@ -107,10 +111,7 @@ export default function App({navigation}) {
                 actionHandler={() => setsnackbar(false)}
                 actionText="OK"
                 accentColor='#ff9933' />
-            <Image
-                source={require('../assets/header.png')}
-                style={{ width: '100%', height: '10%', marginBottom: 20 }}
-            />
+            
             <Text style={{ fontSize: 20, fontWeight: '700', margin: 10 }}>Welcome to Orave Customer Care</Text>
             <View style={styles.register}>
                 <Text style={{ fontSize: 20, margin: 10 }}>

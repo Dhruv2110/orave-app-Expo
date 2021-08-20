@@ -42,7 +42,8 @@ export default function App({ route, navigation }) {
                         </Text>
                     </TouchableOpacity>
                 </View>
-
+            </View>
+            <View style={{height:'10%'}}>
 
             </View>
             <Footer nav={navigation}/>

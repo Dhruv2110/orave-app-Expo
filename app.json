@@ -20,10 +20,12 @@
       "supportsTablet": true
     },
     "android": {
+      "enableDangerousExperimentalLeanBuilds": true,
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
-      }
+      },
+      "package": "com.dhruv21.oraveapp"
     },
     "web": {
       "favicon": "./assets/favicon.png"
