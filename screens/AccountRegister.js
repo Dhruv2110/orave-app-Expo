@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Image, StyleSheet, Text, Button, TextInput, View, ScrollView, TouchableOpacity, Alert } from 'react-native';
+import { Image, StyleSheet, Text, Pressable, TextInput, View, ScrollView, TouchableOpacity, Alert, Modal } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Picker } from '@react-native-picker/picker';
 import SnackBar from 'react-native-snackbar-component'
@@ -18,6 +18,9 @@ export default function App({ route, navigation }) {
     const [snackbar, setsnackbar] = useState(false)
     const [snackbarText, setsnackbarText] = useState("")
     
+    const [modalVisible, setModalVisible] = useState(false);
+    const [modalText, setModalText] = useState("");
+
     const [fname, setFname] = useState('')
     const [lname, setLname] = useState('')
     const [mobile, setMobile] = useState('')
@@ -27,6 +30,7 @@ export default function App({ route, navigation }) {
     const [district, setDistrict] = useState('');
     const [zip, setZip] = useState('');
 
+    const [address, setAddress] = useState('');
     const [landmark, setLandmark] = useState('');
     const [password, setPassword] = useState('');
     const [cnfPassword, setCnfPassword] = useState('');
@@ -43,7 +47,7 @@ export default function App({ route, navigation }) {
     const onSave = async () => {
 
         // console.log("In save")
-        if (fname == '' || lname == '' || mobile == '' || state == '' || district == '' || zip == '' || landmark == '' || password == '') {
+        if (fname == '' || lname == '' || mobile == '' || state == '' || district == '' || zip == '' || address == '' || landmark == '' || password == '') {
             setsnackbarText("Enter All Fields")
             setsnackbar(true)
         }
@@ -65,7 +69,7 @@ export default function App({ route, navigation }) {
         }
         else {
             setLoading(true)
-            var data = { fname, lname, mobile, email: email.toLowerCase(), state, district, zip, landmark, password }
+            var data = { fname, lname, mobile, email: email.toLowerCase(), state, district, zip,address, landmark, password }
             // console.log(date, timeSlot)
             await Auth.signup({ data })
                 .then(async (res) => {
@@ -84,9 +88,10 @@ export default function App({ route, navigation }) {
                     }
                     else if (res.data.code == 1) {
                         setLoading(false)
-                        setsnackbarText("Registered Successfully.Please Login")
-                        setsnackbar(true)
-                        navigation.navigate('Login')
+                        // setsnackbarText("Registered Successfully.Please Login")
+                        // setsnackbar(true)
+                        setModalVisible(true)
+                        // navigation.navigate('Login')
                     }
                     else {
                         setLoading(false)
@@ -107,6 +112,11 @@ export default function App({ route, navigation }) {
         navigation.navigate('Login')
     }
 
+    const onSnackBarOK = () => {
+        setsnackbar(false)
+        // navigation.navigate('Login')
+    }
+
     useEffect(() => {
         // console.log(date.toLocaleDateString())
     }, [])
@@ -124,13 +134,39 @@ export default function App({ route, navigation }) {
                 containerStyle={{ width: '90%', marginHorizontal: 20, borderRadius: 10 }}
                 autoHidingTime={0}
                 textMessage={snackbarText}
-                actionHandler={() => setsnackbar(false)}
+                actionHandler={onSnackBarOK}
                 actionText="OK"
                 accentColor='#ff9933' />
             <Image
                 source={require('../assets/header.png')}
                 style={{ width: '100%', height: '10%', marginBottom: 15 }}
             />
+            <Modal
+                animationType="slide"
+                transparent={true}
+                visible={modalVisible}
+                onRequestClose={() => {
+                    // Alert.alert("Modal has been closed.");
+                    setModalVisible(!modalVisible);
+                }}
+            >
+                <View style={styles.centeredView}>
+                    <View style={styles.modalView}>
+                        <Text style={styles.modalHeading}>Registration Successfull</Text>
+                        <Text style={styles.modalContent}>Please Login.</Text>
+                        <Pressable
+                            style={styles.buttonM}
+                            onPress={
+                                () => {
+                                    setModalVisible(!modalVisible);
+                                    navigation.navigate('Login')
+                                }}
+                        >
+                            <Text style={styles.textStyle}>Close</Text>
+                        </Pressable>
+                    </View>
+                </View>
+            </Modal>
             <Text style={{ fontSize: 20, fontWeight: '700', margin: 5 }}>Welcome to Orave Customer Care</Text>
             <View style={styles.register}>
                 <Text style={{ fontSize: 25, margin: 5 }}>
@@ -232,6 +268,12 @@ export default function App({ route, navigation }) {
                     </View>
                     <TextInput
                         style={styles.input}
+                        value={address}
+                        onChangeText={e => setAddress(e.trim())}
+                        placeholder="*Address"
+                    />
+                    <TextInput
+                        style={styles.input}
                         value={landmark}
                         onChangeText={e => setLandmark(e.trim())}
                         placeholder="*Landmark"
@@ -326,5 +368,52 @@ const styles = StyleSheet.create({
         borderRadius: 30,
         alignItems: 'center',
         backgroundColor: '#43BE72'
+    },
+
+
+    centeredView: {
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+        marginTop: 22,
+        // width:'100%'
+    },
+    modalView: {
+        margin: 20,
+        backgroundColor: "white",
+        borderRadius: 20,
+        padding: 30,
+        alignItems: "center",
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 2
+        },
+        shadowOpacity: 0.30,
+        shadowRadius: 4,
+        elevation: 5
+    },
+    buttonM: {
+        borderRadius: 20,
+        padding: 15,
+        elevation: 2,
+        marginTop: 20,
+        borderWidth: 1,
+        borderColor: '#4169E1',
+        backgroundColor: "#FFFFFF",
+    },
+    textStyle: {
+        color: "black",
+        fontWeight: "bold",
+        textAlign: "center",
+    },
+    modalHeading: {
+        marginBottom: 20,
+        fontWeight: "bold",
+        fontSize: 15
+    },
+    modalContent: {
+        marginBottom: 10,
+        fontSize: 15
     },
 });

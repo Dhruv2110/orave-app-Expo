@@ -1,5 +1,5 @@
 import React,{useEffect} from 'react';
-import { Image, StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+import { Image, StyleSheet, Text, View, TouchableOpacity, Linking } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function App({ nav }) {
@@ -24,7 +24,7 @@ export default function App({ nav }) {
 
     const HomePress = async () => {
         const userId = await AsyncStorage.getItem('@userid')
-        console.log(userId)
+        // console.log(userId)
         if (userId == null) {
             nav.push('Login')
         }
@@ -40,16 +40,16 @@ export default function App({ nav }) {
             <TouchableOpacity onPress={HomePress}>
                 <Text style={{color: 'white',fontSize: 17}}>Home</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => { }}>
+            <TouchableOpacity onPress={() => { Linking.openURL("https://oraveappliances.com/")}}>
                 <Text style={{ color: 'white', fontSize: 17}}>Products</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => { }}>
+            <TouchableOpacity onPress={() => { Linking.openURL("https://oraveappliances.com/index.php?route=product/category&path=17") }}>
                 <Text style={{ color: 'white', fontSize: 17}}>Parts</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => { }}>
+            <TouchableOpacity onPress={() => { nav.push('AMCplans')}}>
                 <Text style={{ color: 'white', fontSize: 17}}>AMC Plans</Text>
             </TouchableOpacity >
-            <TouchableOpacity onPress={() => { }}>
+            <TouchableOpacity onPress={() => { nav.push('Contact')}}>
                 <Text style={{ color: 'white', fontSize: 17}}>Contact Us</Text>
             </TouchableOpacity>
         </View>

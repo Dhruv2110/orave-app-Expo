@@ -108,7 +108,6 @@ export default function App({ route, navigation }) {
                 actionHandler={() => setsnackbar(false)}
                 actionText="OK"
                 accentColor='#ff9933' />
-            <Text style={{ fontSize: 20, fontWeight: '700' }}>Welcome to Orave Customer Care</Text>
             <Text style={{ fontSize: 30, textDecorationLine: 'underline' }}>Select Problems</Text>
                 <SelectBox
                     label=""

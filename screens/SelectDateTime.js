@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useState, useEffect } from 'react';
-import { Image, StyleSheet, Text, Button, TextInput, View, ScrollView, TouchableOpacity, Alert } from 'react-native';
+import { Image, StyleSheet, Text, Button, TextInput, View, ScrollView, TouchableOpacity, Alert, Modal, Pressable } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import DateTimePicker from '@react-native-community/datetimepicker';
@@ -23,10 +23,13 @@ export default function App({ route, navigation }) {
     const [snackbar, setsnackbar] = useState(false)
     const [snackbarText, setsnackbarText] = useState("")
 
+    const [modalVisible, setModalVisible] = useState(false);
+    const [modalText, setModalText] = useState("Hello");
+
     const [date, setDate] = useState(new Date());
     const [mode, setMode] = useState('date');
     const [show, setShow] = useState(false);
-    const [timeSlot, setTimeSlot] = useState(0)
+    const [timeSlot, setTimeSlot] = useState('')
 
     const colors = [
         {
@@ -54,9 +57,13 @@ export default function App({ route, navigation }) {
 
     const onSubmit = () => {
         const getDay = date.getDay()
-        console.log(getDay)
+        // console.log(getDay)
         if(getDay == 0 || getDay == 6) {
             setsnackbarText("Not available on Saturday and Sunday")
+            setsnackbar(true)
+        }
+        else if(timeSlot == '') {
+            setsnackbarText("Select Time Slot")
             setsnackbar(true)
         }
         else {
@@ -90,17 +97,19 @@ export default function App({ route, navigation }) {
         // console.log(date, timeSlot)
         Service.addService({ data })
             .then(async (res) => {
-                console.log(res.data)
+                // console.log(res.data)
                 if (res.data.code == -3) {
                     setLoading(false)
-                    setsnackbarText("Submitted Successfully.Email Not Sent")
-                    setsnackbar(true)
+                    // setsnackbarText("Request Registered Successfully")
+                    // setsnackbar(true)
+                    setModalVisible(true)
                     // console.log("Email Not Found")
                 }
                 else if (res.data.code == 1) {
                     setLoading(false)
-                    setsnackbarText("Submitted Successfully.Email Sent")
-                    setsnackbar(true)
+                    // setsnackbarText("Request Registered Successfully")
+                    // setsnackbar(true)
+                    setModalVisible(true)
                     // navigation.navigate('Login')
                 }
                 else {
@@ -125,9 +134,9 @@ export default function App({ route, navigation }) {
     };
 
 
-    useEffect(() => {
-        // console.log(date.toLocaleDateString())
-    }, [date])
+    // useEffect(() => {
+    //     // console.log(date.toLocaleDateString())
+    // }, [date])
 
     return (
         <SafeAreaView style={styles.container}>
@@ -148,7 +157,32 @@ export default function App({ route, navigation }) {
                 source={require('../assets/header.png')}
                 style={{ width: '100%', height: '10%', marginBottom: 20 }}
             />
-            <Text style={{ fontSize: 20, fontWeight: '700', margin: 10 }}>Welcome to Orave Customer Care</Text>
+            <Modal
+                animationType="slide"
+                transparent={true}
+                visible={modalVisible}
+                onRequestClose={() => {
+                    // Alert.alert("Modal has been closed.");
+                    setModalVisible(!modalVisible);
+                }}
+            >
+                <View style={styles.centeredView}>
+                    <View style={styles.modalView}>
+                        <Text style={styles.modalHeading}>Request Registered Successfully</Text>
+                        <Text style={styles.modalContent}>Please Check Request History for Request ID.</Text>
+                        <Pressable
+                            style={styles.buttonM}
+                            onPress={
+                                () => {
+                                    setModalVisible(!modalVisible);
+                                    navigation.navigate('Home')
+                                }}
+                        >
+                            <Text style={styles.textStyle}>Close</Text>
+                        </Pressable>
+                    </View>
+                </View>
+            </Modal>
             <Text style={{ fontSize: 30, textDecorationLine: 'underline', margin: 10 }}>Select Date and Time</Text>
             <View style={styles.dateContainer}>
                 <Text style={styles.dateText}>Select Date:</Text>
@@ -233,5 +267,51 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         padding: 10,
         borderRadius: 10
+    },
+
+    centeredView: {
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+        marginTop: 22,
+        // width:'100%'
+    },
+    modalView: {
+        margin: 20,
+        backgroundColor: "white",
+        borderRadius: 20,
+        padding: 30,
+        alignItems: "center",
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 2
+        },
+        shadowOpacity: 0.30,
+        shadowRadius: 4,
+        elevation: 5
+    },
+    buttonM: {
+        borderRadius: 20,
+        padding: 15,
+        elevation: 2,
+        marginTop: 20,
+        borderWidth: 1,
+        borderColor: '#4169E1',
+        backgroundColor: "#FFFFFF",
+    },
+    textStyle: {
+        color: "black",
+        fontWeight: "bold",
+        textAlign: "center",
+    },
+    modalHeading: {
+        marginBottom: 20,
+        fontWeight: "bold",
+        fontSize: 15
+    },
+    modalContent: {
+        marginBottom: 10,
+        fontSize: 15
     },
 });

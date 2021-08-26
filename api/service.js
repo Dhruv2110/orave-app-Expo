@@ -43,3 +43,31 @@ export const getAllServices = async (credentials) => {
     })
 
 }
+
+export const addRoRent = async (credentials) => {
+    console.log("in api", credentials)
+
+    return await API({
+        method: 'POST',
+        url: '/addRoRent',
+        data: credentials,
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+
+}
+
+export const getAllRoRent = async (credentials) => {
+    // console.log("in api", credentials)
+
+    return await API({
+        method: 'POST',
+        url: '/getAllRoRent',
+        data: credentials,
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+
+}

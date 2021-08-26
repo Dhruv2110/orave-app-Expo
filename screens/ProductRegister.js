@@ -5,10 +5,47 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import SnackBar from 'react-native-snackbar-component';
 import Spinner from 'react-native-loading-spinner-overlay';
+import { Picker } from '@react-native-picker/picker';
 
 import Footer from '../components/Footer'
 
-import * as Service from '../api/service';
+import * as Product from '../api/service';
+
+
+const DWP = [
+    { name: 'ALKAPURE', value: 'ALKAPURE' },
+    { name: 'GRAND+', value: 'GRAND+' },
+    { name: 'AMAZE', value: 'AMAZE' },
+    { name: 'SUPERB', value: 'SUPERB' },
+    { name: 'CLASSIC', value: 'CLASSIC' },
+    { name: 'ULTIMAA', value: 'ULTIMAA' },
+    { name: 'RADIX', value: 'RADIX' },
+    { name: 'PRIMERA', value: 'PRIMERA' },
+]
+const CWP = [
+    { name: 'IND.CLASSIC 25', value: 'IND.CLASSIC 25' },
+    { name: 'IND.CLASSIC 50', value: 'IND.CLASSIC 50' },
+    { name: 'IND.CLASSIC 100', value: 'IND.CLASSIC 100' },
+    { name: 'SMARTPURE 25', value: 'SMARTPURE 25' },
+    { name: 'SMARTPURE 50', value: 'SMARTPURE 50' },
+]
+const CH = [
+    { name: 'AVIATOR', value: 'AVIATOR' },
+    { name: 'PILOT DJ', value: 'PILOT DJ' },
+    { name: 'PILOT TOUCH', value: 'PILOT TOUCH' },
+    { name: 'SENTUM', value: 'SENTUM' },
+    { name: 'MIRACLE', value: 'MIRACLE' },
+    { name: 'MIRACLE SENSOR', value: 'ULTIMAA' },
+    { name: 'SENTUM SENSOR', value: 'SENTUM SENSOR' },
+    { name: 'DYNMO', value: 'DYNMO' },
+    { name: 'DYNMO DELUX', value: 'DYNMO DELUX' },
+    { name: 'LUMA', value: 'LUMA' },
+]
+const EG = [
+    { name: 'HEARTH', value: 'HEARTH' },
+    { name: 'INSTAHOT', value: 'INSTAHOT' },
+    { name: 'GLAZE', value: 'GLAZE' },
+]
 
 export default function App({navigation}) {
 
@@ -17,13 +54,41 @@ export default function App({navigation}) {
     const [snackbarText, setsnackbarText] = useState("")
 
     const [product, setProduct] = useState('')
-    const [model, setModel] = useState('')
+    const [model, setModel] = useState(0)
+    const [modelList, setModelList] = useState([])
     const [serialNo, setSerialNo] = useState('')
     const [billNo, setBillNo] = useState('')
 
     const [date, setDate] = useState(new Date());
     const [mode, setMode] = useState('date');
     const [show, setShow] = useState(false);
+
+    useEffect(() => {
+        if (product == 'DOMESTIC WATER PURIFIER') {
+            setModel(0)
+            setModelList([])
+            setModelList(DWP)
+        }
+        else if (product == 'COMMERCIAL WATER PURIFIER') {
+            setModel(0)
+            setModelList([])
+            setModelList(CWP)
+        }
+        else if (product == 'CHIMNEY HOOD') {
+            setModel(0)
+            setModelList([])
+            setModelList(CH)
+        }
+        else if (product == 'ELECTRIC GEYSER') {
+            setModel(0)
+            setModelList([])
+            setModelList(EG)
+        }
+        else {
+            setModel(0)
+            setModelList([])
+        }
+    },[product])
 
 
     const showMode = (currentMode) => {
@@ -41,9 +106,36 @@ export default function App({navigation}) {
         setDate(currentDate);
     };
 
+    const check = () => {
+        // console.log(product,model)
+        if (product == 0) {
+            setsnackbarText("Select Product")
+            setsnackbar(true)
+        }
+        else if (model == 0) {
+            setsnackbarText("Select Model")
+            setsnackbar(true)
+        }
+        else if (serialNo == '') {
+            setsnackbarText("Enter Serial No.")
+            setsnackbar(true)
+        }
+        else {}
+    }
+
     const onSave = async () => {
-        if (product == '' || model == '' || serialNo == '' || billNo == '') {
-            setsnackbarText("Enter All Fields")
+
+
+        if (product == 0) {
+            setsnackbarText("Select Product")
+            setsnackbar(true)
+        }
+        else if (model == 0) {
+            setsnackbarText("Select Model")
+            setsnackbar(true)
+        }
+        else if (serialNo == '') {
+            setsnackbarText("Enter Serial No.")
             setsnackbar(true)
         }
         else {
@@ -51,7 +143,7 @@ export default function App({navigation}) {
             const userId = await AsyncStorage.getItem('@userid')
             var data = { userId, product, model, serialNo, billNo, ProdInstDate: date.toLocaleDateString().toString() }
             // console.log(date, timeSlot)
-            await Service.addProduct({ data })
+            await Product.addProduct({ data })
                 .then(async (res) => {
                     console.log(res.data)
                     if (res.data.code == 1) {
@@ -85,7 +177,7 @@ export default function App({navigation}) {
         
     }
     const onCancel = () => {
-
+        navigation.navigate('Home')
     }
 
     useEffect(() => {
@@ -120,18 +212,43 @@ export default function App({navigation}) {
             </View>
             <View style={{ width: '90%', margin: 10 }}>
                 <Text style={{ fontSize: 17 }}>Register Product:</Text>
-                <TextInput
+                {/* <TextInput
                     style={styles.input}
                     value={product}
                     onChangeText={setProduct}
                     placeholder="*Select Product"
-                />
-                <TextInput
+                /> */}
+                <View style={styles.dropdown}>
+                    <Picker
+                        selectedValue={product}
+                        onValueChange={(itemValue, itemIndex) =>
+                            setProduct(itemValue)}
+                        style={{ backgroundColor: 'black', width: 500, height: 50, color: 'grey' }}
+                    >
+                        <Picker.Item label="*Select Product" value="0" />
+                        <Picker.Item label="DOMESTIC WATER PURIFIER" value="DOMESTIC WATER PURIFIER" />
+                        <Picker.Item label="COMMERCIAL WATER PURIFIER" value="COMMERCIAL WATER PURIFIER" />
+                        <Picker.Item label="CHIMNEY HOOD" value="CHIMNEY HOOD" />
+                        <Picker.Item label="ELECTRIC GEYSER" value="ELECTRIC GEYSER" />
+                    </Picker>
+                </View>
+                <View style={styles.dropdown}>
+                    <Picker
+                        selectedValue={model}
+                        onValueChange={(itemValue, itemIndex) =>
+                            setModel(itemValue)}
+                        style={{ backgroundColor: 'black', width: 500, height: 50, color: 'grey' }}
+                    >
+                        <Picker.Item label="*Select Model" value="0" />
+                        {modelList.map(item => (<Picker.Item label={item.name} value={item.value} />))}
+                    </Picker>
+                </View>
+                {/* <TextInput
                     style={styles.input}
                     value={model}
                     onChangeText={setModel}
                     placeholder="*Select Model"
-                />
+                /> */}
                 <TextInput
                     style={styles.input}
                     value={serialNo}
@@ -142,7 +259,7 @@ export default function App({navigation}) {
                     style={styles.input}
                     value={billNo}
                     onChangeText={setBillNo}
-                    placeholder="*Select Bill Number"
+                    placeholder="Select Bill Number"
                 />
                 <Text style={{ fontSize: 17 }}>*Date of Installation:</Text>
                 <TouchableOpacity style={styles.Calender} onPress={showDatepicker}>
@@ -185,7 +302,16 @@ const styles = StyleSheet.create({
         margin: 10,
         borderRadius: 5
     },
-
+    dropdown: {
+        // fontSize: 10,
+        width: '80%',
+        height: 40,
+        marginLeft: 5,
+        margin: 3,
+        borderWidth: 1,
+        borderRadius: 7,
+        justifyContent: 'center'
+    },
     input: {
         width: '80%',
         height: 40,

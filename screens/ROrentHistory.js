@@ -10,7 +10,7 @@ import Footer from '../components/Footer'
 // import ListCard from '../components/ListCard'
 
 
-import * as Service from '../api/service';
+import * as RoRent from '../api/service';
 import { forEach } from 'lodash';
 
 export default function App({ route, navigation }) {
@@ -24,21 +24,21 @@ export default function App({ route, navigation }) {
 
     const [refreshing, setRefreshing] = useState(false);
 
-    const [data,setData] = useState([])
+    const [data, setData] = useState([])
 
     const checkUser = async () => {
         const userId = await AsyncStorage.getItem('@userid')
         // console.log(userId)
         setUserId(userId)
         //const getHistory = async () => {
-            await Service.getAllServices({ data: userId })
-                .then((res) => {
-                    const result = res.data.items
-                    setData(result)
-                    // console.log("Items:",res.data.items)
+        await RoRent.getAllRoRent({ data: userId })
+            .then((res) => {
+                const result = res.data.items
+                setData(result)
+                // console.log("Items:",res.data.items)
 
-                })
-                .catch(err => console.log(err))
+            })
+            .catch(err => console.log(err))
         //}
         if (userId == null) {
             navigation.push('Login')
@@ -63,17 +63,17 @@ export default function App({ route, navigation }) {
         setRefreshing(false);
     };
 
-    const ListCard = ({ ID, reqDate}) => {
+    const ListCard = ({ ID, reqDate }) => {
         //console.log(data)
         var date = new Date(reqDate)
         var newDate = date.toLocaleDateString().toString()
 
         return (
             <TouchableOpacity onPress={cardPress} style={styles.listContainer}>
-                <Text style={styles.text}>Request ID : 
-                    <Text style={{fontWeight:'bold'}}> {ID}</Text>
+                <Text style={styles.text}>Request ID :
+                    <Text style={{ fontWeight: 'bold' }}> {ID}</Text>
                 </Text>
-                <Text style={styles.text}>Request Date : 
+                <Text style={styles.text}>Request Date :
                     <Text style={{ fontWeight: 'bold' }}> {newDate}</Text>
                 </Text>
             </TouchableOpacity>
@@ -88,16 +88,16 @@ export default function App({ route, navigation }) {
         // <ScrollView contentContainerStyle={styles.container}>
         <>
 
-        <SafeAreaView style={styles.container}>
+            <SafeAreaView style={styles.container}>
                 <Image
                     source={require('../assets/header.png')}
-                    style={{ width: '100%', height: '10%'}}
+                    style={{ width: '100%', height: '10%' }}
                 />
                 <View style={styles.register}>
-                    <Text style={{ fontSize: 25, margin: 10, alignSelf: 'center'}}>
-                        Service Request History
+                    <Text style={{ fontSize: 25, margin: 10, alignSelf: 'center' }}>
+                        RO on Rent Request History
                     </Text>
-                    <Text style={{ fontSize: 15, fontStyle: 'italic',textAlign:'center' }}>(Pull to refresh)</Text>
+                    <Text style={{ fontSize: 15, fontStyle: 'italic', textAlign: 'center' }}>(Pull to refresh)</Text>
 
                 </View>
                 {/* <Modal
@@ -128,7 +128,7 @@ export default function App({ route, navigation }) {
                         onRefresh={onRefresh}
                     />
                 }>
-                    
+
                     {data.map((item) => <ListCard key={item._id} ID={item._id} reqDate={item.createdAt} />)}
                     {/* <ListCard />
                     <ListCard />
@@ -136,7 +136,7 @@ export default function App({ route, navigation }) {
                 </ScrollView>
                 <Footer nav={navigation} />
 
-        </SafeAreaView>
+            </SafeAreaView>
 
         </>
         //{/* </ScrollView > */ }
@@ -151,13 +151,13 @@ const styles = StyleSheet.create({
         //alignItems:'center',
         justifyContent: 'space-between'
     },
-    scroll:{
-        flex:1,
-        alignSelf:'center',
-        width:'95%',
-        height:'70%',
+    scroll: {
+        flex: 1,
+        alignSelf: 'center',
+        width: '95%',
+        height: '70%',
         //borderWidth:2,
-        margin:7,
+        margin: 7,
         //padding:10
         //alignItems:'stretch'
         //justifyContent:'space-around'

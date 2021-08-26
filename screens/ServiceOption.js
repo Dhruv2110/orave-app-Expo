@@ -1,7 +1,8 @@
 import { StatusBar } from 'expo-status-bar';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Image, StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import Footer from '../components/Footer'
 
@@ -9,10 +10,25 @@ import * as Auth from '../api/test';
 
 export default function App({ navigation }) {
 
+
+    const [user, setUser] = useState('User')
+
+
+    const checkUser = async () => {
+        const userId = await AsyncStorage.getItem('@userid')
+        // console.log(userId)
+        if (userId == null) {
+            navigation.push('Login')
+        }
+        else {
+            const userName = await AsyncStorage.getItem('@name')
+            setUser(userName)
+        }
+    }
+
     useEffect(() => {
-        // Auth.test({ msg: 'From app' })
-        //     .then(res => console.log(res.data))
-        //     .catch(err => console.log(err))
+        checkUser()
+        // console.log(navigation)
     }, [])
 
     return (
@@ -21,7 +37,11 @@ export default function App({ navigation }) {
                 source={require('../assets/header.png')}
                 style={{ width: '100%', height: '10%', marginBottom: 20 }}
             />
-            <Text style={{ fontSize: 20, fontWeight: '700', margin: 10 }}>Welcome to Orave Customer Care</Text>
+            <View>
+                <Text style={{ fontSize: 25 }}>
+                    Hello, {user}
+                </Text>
+            </View>
             <Text style={{ fontSize: 30, textDecorationLine: 'underline', margin: 20 }}>Select Service Option</Text>
             <View style={styles.btnContainer}>
                 <View style={styles.btncol}>

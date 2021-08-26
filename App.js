@@ -14,6 +14,12 @@ import SelectDateTime from './screens/SelectDateTime'
 import AccountRegister from './screens/AccountRegister'
 import ProductRegister from './screens/ProductRegister'
 import RequestHistory from './screens/RequestHistory'
+import ROrent from './screens/ROrent'
+import ROrentHistory from './screens/ROrentHistory'
+
+
+import AMCplans from './screens/FooterScreens/AMCplans'
+import Contact from './screens/FooterScreens/Contact'
 
 
 const Stack = createNativeStackNavigator();
@@ -31,6 +37,10 @@ function App() {
         <Stack.Screen name="AccRegister" component={AccountRegister} options={{ headerShown: false }} />
         <Stack.Screen name="ProdRegister" component={ProductRegister} options={{ headerShown: false }} />
         <Stack.Screen name="History" component={RequestHistory} options={{ headerShown: false }} />
+        <Stack.Screen name="AMCplans" component={AMCplans} options={{ headerShown: false }} />
+        <Stack.Screen name="Contact" component={Contact} options={{ headerShown: false }} />
+        <Stack.Screen name="ROrent" component={ROrent} options={{ headerShown: false }} />
+        <Stack.Screen name="ROrentHistory" component={ROrentHistory} options={{ headerShown: false }} />
       </Stack.Navigator>
     </NavigationContainer>
   );

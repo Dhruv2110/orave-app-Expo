@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Image, StyleSheet, Text, Button, TextInput, View, ScrollView, TouchableOpacity, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { FontAwesome5, MaterialIcons  } from '@expo/vector-icons';
+import { FontAwesome5, MaterialIcons, Ionicons, Entypo   } from '@expo/vector-icons';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -53,15 +53,24 @@ export default function App({ route, navigation }) {
                 <MaterialIcons name="miscellaneous-services" size={26} color="white" />
                 <Text style={{ fontSize: 20, color: 'white', alignSelf: 'flex-start', marginLeft:7 }}>New Service Request</Text>
             </TouchableOpacity>
+            <TouchableOpacity onPress={() => { navigation.navigate('History') }} style={styles.btnSave}>
+                <FontAwesome5 name="list-alt" size={26} color="white" />
+                <Text style={{ fontSize: 20, color: 'white', alignSelf: 'flex-start', marginLeft: 7 }}>View Previous Requests</Text>
+            </TouchableOpacity>
             <TouchableOpacity onPress={() => { navigation.navigate('ProdRegister')}} style={styles.btnSave}>
                 <MaterialIcons name="electrical-services" size={26} color="white" />
                 <Text style={{ fontSize: 20, color: 'white', alignSelf: 'flex-start', marginLeft: 7   }}>New Product Registration</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => { navigation.navigate('History') }} style={styles.btnSave}>
-                <FontAwesome5 name="list-alt" size={26} color="white" />
-                <Text style={{ fontSize: 20, color: 'white', alignSelf: 'flex-start', marginLeft: 7   }}>View Previous Requests</Text>
+            
+            <TouchableOpacity onPress={() => { navigation.navigate('ROrent') }} style={styles.btnSave}>
+                <Ionicons name="water" size={26} color="white" />
+                <Text style={{ fontSize: 20, color: 'white', alignSelf: 'flex-start', marginLeft: 7   }}>RO on Rent</Text>
             </TouchableOpacity>
-            <View style={{height:'25%'}}>
+            <TouchableOpacity onPress={() => { navigation.navigate('ROrentHistory') }} style={styles.btnSave}>
+                <Entypo  name="water" size={26} color="white" />
+                <Text style={{ fontSize: 20, color: 'white', alignSelf: 'flex-start', marginLeft: 7   }}>View RO Rent Requests</Text>
+            </TouchableOpacity>
+            <View style={{height:'10%'}}>
 
             </View>
             <TouchableOpacity onPress={() => { AsyncStorage.clear();navigation.navigate('Login') }} style={styles.btnLogout}>
@@ -86,7 +95,7 @@ const styles = StyleSheet.create({
     btnSave: {
         flexDirection:'row',
         // margin: 50,
-        width: '75%',
+        width: '80%',
         //borderWidth: 1,
         padding: 10,
         borderRadius: 10,
