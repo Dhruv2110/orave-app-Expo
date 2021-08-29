@@ -32,7 +32,7 @@ export default function App({ route, navigation }) {
         }
         const checkUser = async () => {
             const userId = await AsyncStorage.getItem('@userid')
-            console.log(userId)
+            // console.log(userId)
             if (userId) {
                 navigation.push('Home')
             }
@@ -73,7 +73,7 @@ export default function App({ route, navigation }) {
             // console.log(data)
             Auth.login({ data })
                 .then(async (res) => {
-                    console.log(res.data)
+                    // console.log(res.data)
                     if(res.data.code == -2)
                     {
                         setLoading(false)

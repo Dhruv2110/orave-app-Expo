@@ -8,7 +8,7 @@ export default function App({ nav }) {
     // }, [])
     const checkUser = async () => {
         const userId = await AsyncStorage.getItem('@userid')
-        console.log(userId)
+        // console.log(userId)
         if (userId == null) {
             nav.push('Login')
         }
@@ -40,10 +40,10 @@ export default function App({ nav }) {
             <TouchableOpacity onPress={HomePress}>
                 <Text style={{color: 'white',fontSize: 17}}>Home</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => { Linking.openURL("https://oraveappliances.com/")}}>
+            <TouchableOpacity onPress={() => { Linking.openURL("http://www.oraveappliances.com")}}>
                 <Text style={{ color: 'white', fontSize: 17}}>Products</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => { Linking.openURL("https://oraveappliances.com/index.php?route=product/category&path=17") }}>
+            <TouchableOpacity onPress={() => { Linking.openURL("http://oraveappliances.com/index.php?route=product/category&path=17") }}>
                 <Text style={{ color: 'white', fontSize: 17}}>Parts</Text>
             </TouchableOpacity>
             <TouchableOpacity onPress={() => { nav.push('AMCplans')}}>

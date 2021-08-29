@@ -45,7 +45,7 @@ export const getAllServices = async (credentials) => {
 }
 
 export const addRoRent = async (credentials) => {
-    console.log("in api", credentials)
+    // console.log("in api", credentials)
 
     return await API({
         method: 'POST',

@@ -56,6 +56,7 @@ export default function App({ route, navigation }) {
     }
 
     const onContinue = async () => {
+        setLoading(true)
         const userId = await AsyncStorage.getItem('@userid')
         var data = { userId }
         console.log(userId)
