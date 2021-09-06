@@ -43,34 +43,34 @@ export default function App({ route, navigation }) {
                 source={require('../assets/header.png')}
                 style={{ width: '100%', height: '10%'}}
             />
-            <Text style={{ fontSize: 22, fontWeight: '700'}}>Welcome to Orave Customer Care</Text>
+            <Text style={{ fontSize: 22, fontWeight: '700',margin:10,alignSelf:'center'}}>Welcome to Orave Customer Care</Text>
             <View style={styles.register}>
-                <Text style={{ fontSize: 25}}>
+                <Text style={{ fontSize: 25,margin:5}}>
                     Hello, {user}
                 </Text>
             </View>
             <TouchableOpacity onPress={() => { navigation.navigate('ServiceOpt') }} style={{ ...styles.btnSave, backgroundColor:'#ff8080'}}>
                 <MaterialIcons name="miscellaneous-services" size={26} color="white" />
-                <Text style={{ fontSize: 20, color: 'white', alignSelf: 'flex-start', marginLeft:7 }}>New Service Request</Text>
+                <Text style={{ fontSize: 18, color: 'white', alignSelf: 'flex-start', marginLeft:7 }}>New Service Request</Text>
             </TouchableOpacity>
             <TouchableOpacity onPress={() => { navigation.navigate('History') }} style={{ ...styles.btnSave, backgroundColor:'#0099ff'}}>
                 <FontAwesome5 name="list-alt" size={26} color="white" />
-                <Text style={{ fontSize: 20, color: 'white', alignSelf: 'flex-start', marginLeft: 7 }}>View Previous Requests</Text>
+                <Text style={{ fontSize: 18, color: 'white', alignSelf: 'flex-start', marginLeft: 7 }}>View Previous Requests</Text>
             </TouchableOpacity>
             <TouchableOpacity onPress={() => { navigation.navigate('ProdRegister') }} style={{ ...styles.btnSave, backgroundColor:'#00b33c'}}>
                 <MaterialIcons name="electrical-services" size={26} color="white" />
-                <Text style={{ fontSize: 20, color: 'white', alignSelf: 'flex-start', marginLeft: 7   }}>New Product Registration</Text>
+                <Text style={{ fontSize: 18, color: 'white', alignSelf: 'flex-start', marginLeft: 7   }}>New Product Registration</Text>
             </TouchableOpacity>
             
             <TouchableOpacity onPress={() => { navigation.navigate('ROrent') }} style={{ ...styles.btnSave, backgroundColor:'#666699'}}>
                 <Ionicons name="water" size={26} color="white" />
-                <Text style={{ fontSize: 20, color: 'white', alignSelf: 'flex-start', marginLeft: 7   }}>RO on Rent</Text>
+                <Text style={{ fontSize: 18, color: 'white', alignSelf: 'flex-start', marginLeft: 7   }}>RO on Rent</Text>
             </TouchableOpacity>
             <TouchableOpacity onPress={() => { navigation.navigate('ROrentHistory') }} style={{ ...styles.btnSave, backgroundColor:'#996633'}}>
                 <Entypo  name="water" size={26} color="white" />
-                <Text style={{ fontSize: 20, color: 'white', alignSelf: 'flex-start', marginLeft: 7   }}>View RO Rent Requests</Text>
+                <Text style={{ fontSize: 18, color: 'white', alignSelf: 'flex-start', marginLeft: 7   }}>View RO Rent Requests</Text>
             </TouchableOpacity>
-            <View style={{height:'5%'}}>
+            <View style={{height:20}}>
 
             </View>
             <TouchableOpacity onPress={() => { AsyncStorage.clear();navigation.navigate('Login') }} style={styles.btnLogout}>
@@ -89,13 +89,14 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#fff',
         alignItems: 'center',
-        justifyContent: 'space-between'
+        justifyContent: 'flex-start'
         // justifyContent: 'flex-start',
     },
     btnSave: {
         flexDirection:'row',
-        // margin: 50,
-        width: '80%',
+        margin: 5,
+        height:'6%',
+        width: '75%',
         //borderWidth: 1,
         padding: 10,
         borderRadius: 10,
@@ -110,7 +111,8 @@ const styles = StyleSheet.create({
     btnLogout: {
         flexDirection:'row',
         justifyContent:'space-around',
-        // margin: 50,
+        margin: 30,
+        height: '6%',
         width: '28%',
         //borderWidth: 1,
         padding: 7,

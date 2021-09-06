@@ -42,13 +42,13 @@ export default function App({ route, navigation }) {
                 style={{ width: '100%', height: '10%'}}
             />
             <View>
-                <Text style={{ fontSize: 25 }}>
+                <Text style={{ fontSize: 25 ,margin:5}}>
                     Hello, {user}
                 </Text>
             </View>
-            <Text style={{ fontSize: 30, textDecorationLine: 'underline' }}>Select Product</Text>
+            <Text style={{ fontSize: 30, textDecorationLine: 'underline',margin:5 }}>Select Product</Text>
             <View style={styles.btnContainer}>
-                <View style={styles.btncol}>
+                <View style={styles.btnRow}>
                     <TouchableOpacity onPress={() => click('DOMESTIC WATER PURIFIER')} style={{ ...styles.button, backgroundColor: '#EC258F' }}>
                         <Text style={styles.btnText}>DOMESTIC WATER PURIFIER</Text>
                     </TouchableOpacity>
@@ -56,7 +56,7 @@ export default function App({ route, navigation }) {
                         <Text style={styles.btnText}>COMMERCIAL WATER PURIFIER</Text>
                     </TouchableOpacity>
                 </View>
-                <View style={styles.btncol}>
+                <View style={styles.btnRow}>
                     <TouchableOpacity onPress={() => click('CHIMNEY HOOD')} style={{ ...styles.button, backgroundColor: '#83706A' }}>
                         <Text style={{ ...styles.btnText, color: 'white' }}>CHIMNEY HOOD</Text>
                     </TouchableOpacity>
@@ -66,7 +66,7 @@ export default function App({ route, navigation }) {
                         </Text>
                     </TouchableOpacity>
                 </View>
-                <View style={styles.btncol}>
+                <View style={styles.btnRow}>
                     <TouchableOpacity onPress={() => click('LPG STOVES')} style={{ ...styles.button, backgroundColor: '#83906A' }}>
                         <Text style={{ ...styles.btnText, color: 'white' }}>LPG STOVES</Text>
                     </TouchableOpacity>
@@ -83,18 +83,21 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#fff',
         alignItems: 'center',
-        justifyContent: 'space-between',
+        justifyContent: 'flex-start',
     },
     btnContainer: {
-        alignContent: 'center',
-        justifyContent: 'center'
+        // borderWidth:1,
+        height:'50%',
+        alignItems:'center',
+        // alignContent: 'center',
+        justifyContent: 'flex-start'
     },
-    btncol: {
+    btnRow: {
         flexDirection: 'row',
         justifyContent: 'center'
     },
     button: {
-        height: 130,
+        height: 100,
         width: '42%',
         margin: 10,
         padding: 5,

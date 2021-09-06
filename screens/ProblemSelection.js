@@ -108,7 +108,10 @@ export default function App({ route, navigation }) {
                 actionHandler={() => setsnackbar(false)}
                 actionText="OK"
                 accentColor='#ff9933' />
-            <Text style={{ fontSize: 30, textDecorationLine: 'underline' }}>Select Problems</Text>
+            <Text style={{ fontSize: 30, textDecorationLine: 'underline',marginTop:20 }}>Select Problems</Text>
+                <View style={{height:'5%'}}>
+
+                </View>
                 <SelectBox
                     label=""
                     options={OPTIONS}
@@ -120,6 +123,10 @@ export default function App({ route, navigation }) {
                     hideInputFilter={true}
                 />
 
+            <View style={{ height: '5%' }}>
+
+            </View>
+
             <TextInput
                 style={styles.input}
                 value={input}
@@ -129,9 +136,9 @@ export default function App({ route, navigation }) {
             <TouchableOpacity onPress={onContinue} style={styles.btnCont}>
                 <Text style={{ fontSize: 20 }}>Continue {'>>'}</Text>
             </TouchableOpacity>
-            <View style={{ height: '10%' }}>
+            {/* <View style={{ height: '10%' }}>
 
-            </View>
+            </View> */}
             <Footer nav={navigation}/>
         </SafeAreaView >
     );
@@ -142,12 +149,12 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#fff',
         alignItems: 'center',
-        justifyContent: 'space-between',
+        justifyContent: 'flex-start',
     },
     input: {
         width: '85%',
         height: 50,
-        margin: 10,
+        margin: 20,
         borderWidth: 1,
         padding: 10,
         borderRadius: 7
@@ -155,6 +162,7 @@ const styles = StyleSheet.create({
     btnCont: {
         borderWidth: 1,
         padding: 10,
-        borderRadius: 10
+        borderRadius: 10,
+        margin:20
     },
 });

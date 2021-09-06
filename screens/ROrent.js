@@ -127,7 +127,9 @@ export default function App({ route, navigation }) {
                     </View>
                 </View>
             </Modal>
-            <Text style={{ fontSize: 20, fontWeight: '700', textAlign: 'center', marginTop:20 }}> RO Rent </Text>
+            <View style={{borderWidth:1,alignSelf:'center',padding:5,borderRadius:5}}>
+                <Text style={{ fontSize: 20, fontWeight: '700', textAlign: 'center'}}> RO on Rent </Text>
+            </View>
             <View style={styles.tblcontainer}>
                 <Table borderStyle={{ borderWidth: 1 }}>
                     <Row data={tableData.tableHead} flexArr={[1, 1, 1, 1]} style={styles.head} textStyle={styles.text} />

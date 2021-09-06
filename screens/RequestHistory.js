@@ -63,7 +63,7 @@ export default function App({ route, navigation }) {
         setRefreshing(false);
     };
 
-    const ListCard = ({ ID, reqDate}) => {
+    const ListCard = ({ ID, reqDate, service, product}) => {
         //console.log(data)
         var date = new Date(reqDate)
         var newDate = date.toLocaleDateString().toString()
@@ -75,6 +75,12 @@ export default function App({ route, navigation }) {
                 </Text>
                 <Text style={styles.text}>Request Date : 
                     <Text style={{ fontWeight: 'bold' }}> {newDate}</Text>
+                </Text>
+                <Text style={styles.text}>Service Type : 
+                    <Text style={{fontWeight:'bold'}}> {service}</Text>
+                </Text>
+                <Text style={styles.text}>Product : 
+                    <Text style={{ fontWeight: 'bold' }}> {product}</Text>
                 </Text>
             </TouchableOpacity>
         );
@@ -100,28 +106,6 @@ export default function App({ route, navigation }) {
                     <Text style={{ fontSize: 15, fontStyle: 'italic',textAlign:'center' }}>(Pull to refresh)</Text>
 
                 </View>
-                {/* <Modal
-                    animationType="slide"
-                    transparent={true}
-                    visible={modalVisible}
-                    onRequestClose={() => {
-                        // Alert.alert("Modal has been closed.");
-                        setModalVisible(!modalVisible);
-                    }}
-                >
-                    <View style={styles.centeredView}>
-                        <View style={styles.modalView}>
-                            <Text style={styles.modalHeading}>Request ID:{modalText}</Text>
-                            <Text style={styles.modalHeading}>Request Date:{modalText}</Text>
-                            <Pressable
-                                style={styles.buttonM}
-                                onPress={() => setModalVisible(!modalVisible)}
-                            >
-                                <Text style={styles.textStyle}>Close</Text>
-                            </Pressable>
-                        </View>
-                    </View>
-                </Modal> */}
                 <ScrollView style={styles.scroll} refreshControl={
                     <RefreshControl
                         refreshing={refreshing}
@@ -129,14 +113,23 @@ export default function App({ route, navigation }) {
                     />
                 }>
                     
-                    {data.map((item) => <ListCard key={item._id} ID={item.ServiceRequestNo} reqDate={item.createdAt} />)}
+                    {data.map((item) => 
+                        <ListCard 
+                            key={item._id} 
+                            ID={item.ServiceRequestNo} 
+                            reqDate={item.createdAt} 
+                            service={item.service} 
+                            product={item.product}
+                        />)}
                     {/* <ListCard />
                     <ListCard />
                     <ListCard /> */}
+                    <View style={{height:70}}></View>
+
                 </ScrollView>
-                <Footer nav={navigation} />
 
         </SafeAreaView>
+                <Footer nav={navigation} />
 
         </>
         //{/* </ScrollView > */ }
@@ -155,7 +148,7 @@ const styles = StyleSheet.create({
         flex:1,
         alignSelf:'center',
         width:'95%',
-        height:'70%',
+        // height:'20%',
         //borderWidth:2,
         margin:7,
         //padding:10
@@ -165,7 +158,7 @@ const styles = StyleSheet.create({
     listContainer: {
         backgroundColor: 'white',
         width: '95%',
-        height: 70,
+        height: 120,
         //borderWidth:1,
         borderRadius: 10,
         padding: 5,
@@ -180,7 +173,7 @@ const styles = StyleSheet.create({
     },
     text: {
         fontSize: 15,
-        margin: 3
+        margin: 3,
     },
 
 

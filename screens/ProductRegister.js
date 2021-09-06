@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Image, StyleSheet, Text, TextInput, View, ScrollView, TouchableOpacity } from 'react-native';
+import { Image, StyleSheet, Text, TextInput, View, ScrollView,Button, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import SnackBar from 'react-native-snackbar-component';
 import Spinner from 'react-native-loading-spinner-overlay';
 import { Picker } from '@react-native-picker/picker';
+import { BarCodeScanner } from 'expo-barcode-scanner';
 
 import Footer from '../components/Footer'
 
@@ -13,38 +14,66 @@ import * as Product from '../api/service';
 
 
 const DWP = [
-    { name: 'ALKAPURE', value: 'ALKAPURE' },
-    { name: 'GRAND+', value: 'GRAND+' },
-    { name: 'AMAZE', value: 'AMAZE' },
-    { name: 'SUPERB', value: 'SUPERB' },
-    { name: 'CLASSIC', value: 'CLASSIC' },
-    { name: 'ULTIMAA', value: 'ULTIMAA' },
+    { name: 'ALKAPURE (OAI-IWP-AKP01-12MW)', value: 'ALKAPURE-AKP01' },
+    { name: 'ALKAPURE (OAI-IWP-AKP02-12MW)', value: 'ALKAPURE-AKP02' },
+    { name: 'ALKAPURE (OAI-IWP-AKP03-12MW)', value: 'ALKAPURE-AKP03' },
+    { name: 'GRAND+ (OAI-ROWP-GRN01-12MW)', value: 'GRAND+-GRN01' },
+    { name: 'GRAND+ (OAI-ROWP-GRN02-12MW)', value: 'GRAND+-GRN02' },
+    { name: 'GRAND+ (OAI-ROWP-GRN03-12MW)', value: 'GRAND+-GRN03' },
+    { name: 'AMAZE (OAI-ROWP-AMZ01-12MW)', value: 'AMAZE-AMZ01' },
+    { name: 'AMAZE (OAI-ROWP-AMZ02-12MW)', value: 'AMAZE-AMZ02' },
+    { name: 'AMAZE (OAI-ROWP-AMZ03-12MW)', value: 'AMAZE-AMZ03' },
+    { name: 'SUPERB (OAI-ROWP-SUP01-18MW)', value: 'SUPERB-SUP01' },
+    { name: 'SUPERB (OAI-ROWP-SUP02-24MW)', value: 'SUPERB-SUP02' },
+    { name: 'CLASSIC (OAI-ROWP-CLS01-12MW)', value: 'CLASSIC-CLS01' },
+    { name: 'CLASSIC (OAI-ROWP-CLS02-12MW)', value: 'CLASSIC-CLS02' },
+    { name: 'CLASSIC (OAI-ROWP-CLS03-12MW)', value: 'CLASSIC-CLS03' },
+    { name: 'CLASSIC (OAI-ROWP-CLS04-12MW)', value: 'CLASSIC-CLS04' },
+    { name: 'ULTIMAA (OAI-ROWP-ULT01-18MW)', value: 'ULTIMAA-ULT01' },
+    { name: 'ULTIMAA (OAI-ROWP-ULT02-24MW)', value: 'ULTIMAA-ULT02' },
+    { name: 'ULTIMAA (OAI-ROWP-ULT03-12MW)', value: 'ULTIMAA-ULT03' },
+    { name: 'ULTIMAA (OAI-ROWP-ULT04-24MW)', value: 'ULTIMAA-ULT04' },
+    { name: 'ULTIMAA (OAI-ROWP-ULT05-12MW)', value: 'ULTIMAA-ULT05' },
     { name: 'RADIX', value: 'RADIX' },
-    { name: 'PRIMERA', value: 'PRIMERA' },
+    { name: 'PRIMERA (OAI-ROWP-PRM01-12MW)', value: 'PRIMERA-PRM01' },
+    { name: 'PRIMERA (OAI-ROWP-PRM02-12MW)', value: 'PRIMERA-PRM02' },
+    { name: 'PRIMERA (OAI-ROWP-PRM03-12MW)', value: 'PRIMERA-PRM03' },
 ]
 const CWP = [
-    { name: 'IND.CLASSIC 25', value: 'IND.CLASSIC 25' },
-    { name: 'IND.CLASSIC 50', value: 'IND.CLASSIC 50' },
-    { name: 'IND.CLASSIC 100', value: 'IND.CLASSIC 100' },
-    { name: 'SMARTPURE 25', value: 'SMARTPURE 25' },
-    { name: 'SMARTPURE 50', value: 'SMARTPURE 50' },
+    { name: 'IND.CLASSIC 25 (OAI-RCWP-IND.CLS25)', value: 'IND.CLASSIC 25-CLS25' },
+    { name: 'IND.CLASSIC 50 (OAI-RCWP-IND.CLS50)', value: 'IND.CLASSIC 50-CLS50' },
+    { name: 'IND.CLASSIC 100 (OAI-RCWP-IND.CLS100)', value: 'IND.CLASSIC 100-CLS100' },
+    { name: 'SMARTPURE 25 (OAI-RCWP-SMP25)', value: 'SMARTPURE 25-SMP25' },
+    { name: 'SMARTPURE 50 (OAI-RCWP-SMP50)', value: 'SMARTPURE 50-SMP50' },
+    { name: 'SMARTPURE 100 (OAI-RCWP-SMP100)', value: 'SMARTPURE 100-SMP100' },
 ]
 const CH = [
-    { name: 'AVIATOR', value: 'AVIATOR' },
-    { name: 'PILOT DJ', value: 'PILOT DJ' },
-    { name: 'PILOT TOUCH', value: 'PILOT TOUCH' },
-    { name: 'SENTUM', value: 'SENTUM' },
-    { name: 'MIRACLE', value: 'MIRACLE' },
-    { name: 'MIRACLE SENSOR', value: 'ULTIMAA' },
-    { name: 'SENTUM SENSOR', value: 'SENTUM SENSOR' },
-    { name: 'DYNMO', value: 'DYNMO' },
-    { name: 'DYNMO DELUX', value: 'DYNMO DELUX' },
-    { name: 'LUMA', value: 'LUMA' },
+    { name: 'AVIATOR (OAI-KA-ECH-AVT01)', value: 'AVIATOR-AVT01' },
+    { name: 'PILOT DJ (OAI-KA-ECH-PTJ01)', value: 'PILOT DJ-PTJ01' },
+    { name: 'PILOT DJ (OAI-KA-ECH-PTJ02)', value: 'PILOT DJ-PTJ02' },
+    { name: 'PILOT TOUCH (OAI-KA-ECH-PTM01)', value: 'PILOT TOUCH-PTM01' },
+    { name: 'PILOT TOUCH (OAI-KA-ECH-PTM02)', value: 'PILOT TOUCH-PTM02' },
+    { name: 'SENTUM (OAI-KA-ECH-STM01)', value: 'SENTUM-STM01' },
+    { name: 'SENTUM SENSOR (OAI-KA-ECH-STM02)', value: 'SENTUM SENSOR-STM02' },
+    { name: 'SENTUM SENSOR (OAI-KA-ECH-STM03)', value: 'SENTUM SENSOR-STM03' },
+    { name: 'MIRACLE (OAI-KA-ECH-MIR01)', value: 'MIRACLE-MIR01' },
+    { name: 'MIRACLE SENSOR (OAI-KA-ECH-MIR02)', value: 'ULTIMAA-MIR02' },
+    { name: 'DYNMO (OAI-KA-ECH-DYM01)', value: 'DYNMO-DYM01' },
+    { name: 'DYNMO (OAI-KA-ECH-DYM03)', value: 'DYNMO-DYM03' },
+    { name: 'DYNMO DELUX (OAI-KA-ECH-DYM02)', value: 'DYNMO DELUX-DYM02' },
+    { name: 'DYNMO DELUX (OAI-KA-ECH-DYM04)', value: 'DYNMO DELUX-DYM04' },
+    { name: 'LUMA (OAI-KA-ECH-LUM01)', value: 'LUMA-LUM01' },
 ]
 const EG = [
-    { name: 'HEARTH', value: 'HEARTH' },
-    { name: 'INSTAHOT', value: 'INSTAHOT' },
-    { name: 'GLAZE', value: 'GLAZE' },
+    { name: 'HEARTH (OAI-EG-15L)', value: 'HEARTH-15L' },
+    { name: 'HEARTH (OAI-EG-25L)', value: 'HEARTH-25L' },
+    { name: 'HEARTH (OAI-EG-35L)', value: 'HEARTH-35L' },
+    { name: 'INSTAHOT (OAI-EG-1L)', value: 'INSTAHOT-1L' },
+    { name: 'INSTAHOT (OAI-EG-3L)', value: 'INSTAHOT-3L' },
+    { name: 'GLAZE (OAI-EG-P-6L)', value: 'GLAZE-P-6L' },
+    { name: 'GLAZE (OAI-EG-P-10L)', value: 'GLAZE-P-10L' },
+    { name: 'GLAZE (OAI-EG-P-15L)', value: 'GLAZE-P-15L' },
+    { name: 'GLAZE (OAI-EG-P-25L)', value: 'GLAZE-P-25L' },
 ]
 
 export default function App({navigation}) {
@@ -62,6 +91,29 @@ export default function App({navigation}) {
     const [date, setDate] = useState(new Date());
     const [mode, setMode] = useState('date');
     const [show, setShow] = useState(false);
+
+    const [hasPermission, setHasPermission] = useState(null);
+    const [scanned, setScanned] = useState(false);
+
+    // useEffect(() => {
+    //     (async () => {
+    //         const { status } = await BarCodeScanner.requestPermissionsAsync();
+    //         setHasPermission(status === 'granted');
+    //     })();
+    // }, []);
+
+    // const handleBarCodeScanned = ({ type, data }) => {
+    //     setScanned(true);
+    //     alert(`Bar code with type ${type} and data ${data} has been scanned!`);
+    // };
+
+    // if (hasPermission === null) {
+    //     return <Text>Requesting for camera permission</Text>;
+    // }
+    // if (hasPermission === false) {
+    //     return <Text>No access to camera</Text>;
+    // }
+
 
     useEffect(() => {
         if (product == 'DOMESTIC WATER PURIFIER') {
@@ -180,15 +232,12 @@ export default function App({navigation}) {
         navigation.navigate('Home')
     }
 
-    useEffect(() => {
-        // console.log(date.toLocaleDateString())
-    }, [])
 
     return (
         <SafeAreaView style={styles.container}>
             <Image
                 source={require('../assets/header.png')}
-                style={{ width: '100%', height: '10%', marginBottom: 20 }}
+                style={{ width: '100%', height: '10%', marginBottom: 10 }}
             />
             <Spinner
                 visible={loading}
@@ -211,13 +260,7 @@ export default function App({navigation}) {
                 </Text>
             </View>
             <View style={{ width: '90%', margin: 10 }}>
-                <Text style={{ fontSize: 17 }}>Register Product:</Text>
-                {/* <TextInput
-                    style={styles.input}
-                    value={product}
-                    onChangeText={setProduct}
-                    placeholder="*Select Product"
-                /> */}
+                <Text style={{ fontSize: 17,marginVertical:7,marginLeft:5 ,color:'blue'}}>Register Product:</Text>
                 <View style={styles.dropdown}>
                     <Picker
                         selectedValue={product}
@@ -240,15 +283,9 @@ export default function App({navigation}) {
                         style={{ backgroundColor: 'black', width: 500, height: 50, color: 'grey' }}
                     >
                         <Picker.Item label="*Select Model" value="0" />
-                        {modelList.map(item => (<Picker.Item label={item.name} value={item.value} />))}
+                        {modelList.map((item,index) => (<Picker.Item key={index} label={item.name} value={item.value} />))}
                     </Picker>
                 </View>
-                {/* <TextInput
-                    style={styles.input}
-                    value={model}
-                    onChangeText={setModel}
-                    placeholder="*Select Model"
-                /> */}
                 <TextInput
                     style={styles.input}
                     value={serialNo}
@@ -276,6 +313,16 @@ export default function App({navigation}) {
                 )}
             </View>
 
+            {/* <View style={styles.barCode}>
+                <BarCodeScanner
+                    onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
+                    style={StyleSheet.absoluteFillObject}
+                />
+                {scanned && <Button title={'Tap to Scan Again'} onPress={() => setScanned(false)} />}
+            </View> */}
+            {/* <TouchableOpacity onPress={() => setScanned(false)} style={styles.btnCancel}>
+                <Text style={{ fontSize: 22, color: 'red' }}>scan</Text>
+            </TouchableOpacity> */}
             <View style={styles.btnContainer}>
                 <TouchableOpacity onPress={onCancel} style={styles.btnCancel}>
                     <Text style={{ fontSize: 22, color: 'red' }}>Cancel</Text>
@@ -294,12 +341,12 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#fff',
         alignItems: 'center',
-        justifyContent: 'space-between'
-        // justifyContent: 'flex-start',
+        // justifyContent: 'space-between'
+        justifyContent: 'flex-start',
     },
     register: {
         borderWidth: 1,
-        margin: 10,
+        margin: 5,
         borderRadius: 5
     },
     dropdown: {
@@ -307,7 +354,7 @@ const styles = StyleSheet.create({
         width: '80%',
         height: 40,
         marginLeft: 5,
-        margin: 3,
+        margin: 7,
         borderWidth: 1,
         borderRadius: 7,
         justifyContent: 'center'
@@ -315,7 +362,8 @@ const styles = StyleSheet.create({
     input: {
         width: '80%',
         height: 40,
-        margin: 5,
+        marginLeft: 5,
+        margin: 7,
         borderWidth: 1,
         padding: 5,
         borderRadius: 7
@@ -339,7 +387,14 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         //borderColor: '#43A7D3',
     },
+    barCode: {
+        // flex: 1,
+        // flexDirection: 'column',
+        // justifyContent: 'center',
+    },
     btnContainer: {
+        // position:'absolute',
+        // bottom:'10%',
         width: '95%',
         flexDirection: 'row',
         // alignContent: 'space-between'

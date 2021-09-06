@@ -35,14 +35,14 @@ export default function App({ navigation }) {
         <SafeAreaView style={styles.container}>
             <Image
                 source={require('../assets/header.png')}
-                style={{ width: '100%', height: '10%', marginBottom: 20 }}
+                style={{ width: '100%', height: '10%' }}
             />
             <View>
-                <Text style={{ fontSize: 25 }}>
+                <Text style={{ fontSize: 25,margin:20}}>
                     Hello, {user}
                 </Text>
             </View>
-            <Text style={{ fontSize: 30, textDecorationLine: 'underline', margin: 20 }}>Select Service Option</Text>
+            <Text style={{ fontSize: 30, textDecorationLine: 'underline',margin:10}}>Select Service</Text>
             <View style={styles.btnContainer}>
                 <View style={styles.btncol}>
                     <TouchableOpacity onPress={() => { navigation.navigate('ProductSel', { service: 'Installation' }) }} style={{ ...styles.button, backgroundColor: 'skyblue' }}>
@@ -63,12 +63,10 @@ export default function App({ navigation }) {
                         </Text>
                     </TouchableOpacity>
                 </View>
-
-
             </View>
-            <View style={{height:'10%'}}>
+            {/* <View style={{height:'10%'}}>
 
-            </View>
+</View> */}
             {/* <TouchableOpacity style={styles.btnNewProduct} >
                 <Text style={{ alignSelf: 'center', fontSize: 17 }}>Register for New Product Warranty</Text>
             </TouchableOpacity> */}
@@ -83,18 +81,19 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
         alignItems: 'center',
         // justifyContent: 'space-evenly'
-        justifyContent: 'space-between',
+        justifyContent: 'flex-start',
     },
     btnContainer: {
         alignContent: 'center',
         justifyContent: 'center'
     },
     btncol: {
+        // alignContent:'space-around',
         flexDirection: 'row',
         justifyContent: 'center'
     },
     button: {
-        height: 150,
+        height: 140,
         width: '42%',
         margin: 10,
         justifyContent: 'center',
@@ -111,16 +110,5 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         textAlign: 'center'
     },
-    btnNewProduct: {
-        height: '7%',
-        width: '80%',
-        borderWidth: 2,
-        borderRadius: 10,
-        alignSelf: 'center',
-        marginTop: 50,
-        // position: 'absolute',
-        // bottom: 40,
-        justifyContent: 'center',
-    }
 
 });

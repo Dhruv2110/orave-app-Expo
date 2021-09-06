@@ -178,18 +178,20 @@ export default function App({ route, navigation }) {
                 <View style={{ width: '95%', margin: 5 }}>
                     <Text style={{ color: 'blue', fontSize: 17 }}>Your Personal Details:</Text>
 
-                    <TextInput
-                        style={styles.input}
-                        value={fname}
-                        onChangeText={e => setFname(e.trim())}
-                        placeholder="*First Name"
-                    />
-                    <TextInput
-                        style={styles.input}
-                        value={lname}
-                        onChangeText={e => setLname(e.trim())}
-                        placeholder="*Last Name"
-                    />
+                    <View style={{ flexDirection: 'row' }}>
+                        <TextInput
+                            style={{...styles.input2,width:'47%',marginLeft:5}}
+                            value={fname}
+                            onChangeText={e => setFname(e.trim())}
+                            placeholder="*First Name"
+                        />
+                        <TextInput
+                            style={{ ...styles.input2, width: '47%'}}
+                            value={lname}
+                            onChangeText={e => setLname(e.trim())}
+                            placeholder="*Last Name"
+                        />
+                    </View>
                     <TextInput
                         style={styles.input}
                         value={mobile}
@@ -302,6 +304,9 @@ export default function App({ route, navigation }) {
             <TouchableOpacity onPress={onCancel} style={styles.btnLogin}>
                 <Text style={{ fontSize: 15, color: 'blue' }}>Click Here to Login</Text>
             </TouchableOpacity>
+            <View style={{height:50}}>
+
+            </View>
             </ScrollView>
             <Footer nav={navigation} />
         </SafeAreaView>

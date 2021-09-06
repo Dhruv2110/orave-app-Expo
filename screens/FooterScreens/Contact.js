@@ -48,10 +48,11 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#fff',
         alignItems: 'center',
-        justifyContent: 'space-between'
-        // justifyContent: 'flex-start',
+        // justifyContent: 'space-between'
+        justifyContent: 'flex-start',
     },
     cardTitle:{
+        margin:20,
         //borderWidth:1,
         backgroundColor:'white',
         borderRadius:10,
@@ -64,6 +65,7 @@ const styles = StyleSheet.create({
         shadowRadius: 1, //IOS
     },
     cardPhone:{
+        margin: 20,
         padding:10,
         backgroundColor: 'white',
         borderRadius: 10,
@@ -76,6 +78,7 @@ const styles = StyleSheet.create({
         shadowRadius: 1, //IOS
     },
     cardWeb: {
+        margin: 20,
         //borderWidth:1,
         padding:10,
         backgroundColor: 'white',
