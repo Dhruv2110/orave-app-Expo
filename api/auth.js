@@ -28,3 +28,16 @@ export const login = async (credentials) => {
         }
     })
 }
+
+export const enggLogin = async (credentials) => {
+    // console.log("in api", credentials)
+
+    return await API({
+        method: 'POST',
+        url: '/enggLogin',
+        data: credentials,
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+}

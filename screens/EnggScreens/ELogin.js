@@ -5,9 +5,9 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import SnackBar from 'react-native-snackbar-component';
 import Spinner from 'react-native-loading-spinner-overlay';
 
-import Footer from '../components/Footer'
+import Footer from '../../components/Footer'
 
-import * as Auth from '../api/auth';
+import * as Auth from '../../api/auth';
 
 export default function App({ route, navigation }) {
 
@@ -24,25 +24,22 @@ export default function App({ route, navigation }) {
 
     useEffect(() => {
 
-        const localStorage = async () => {
+        // const localStorage = async () => {
 
-            console.log("After Save ID", await AsyncStorage.getItem('@userid'))
-            console.log("After Save Email", await AsyncStorage.getItem('@email'))
-            console.log("After Save Name", await AsyncStorage.getItem('@name'))
-        }
-        const checkUser = async () => {
-            const userId = await AsyncStorage.getItem('@userid')
-            const EnggId = await AsyncStorage.getItem('@EnggUserid')
-            // console.log(userId)
-            if (userId) {
-                navigation.push('Home')
-            }
-            else if(EnggId) {
-                navigation.push('EHome')
-            }
-        }
+        //     console.log("After Save ID", await AsyncStorage.getItem('@userid'))
+        //     console.log("After Save Email", await AsyncStorage.getItem('@email'))
+        //     console.log("After Save Name", await AsyncStorage.getItem('@name'))
+        // }
+        // const checkUser = async () => {
+        //     const userId = await AsyncStorage.getItem('@EnggUserid')
+        //     // console.log(userId)
+        //     if (userId) {
+        //         navigation.push('Home')
+        //     }
+        // }
 
-        checkUser()
+        // checkUser()
+
     },[])
 
 
@@ -55,13 +52,7 @@ export default function App({ route, navigation }) {
     const onSave = () => {
 
         if (!validateEmail(email)) {
-            // Alert.alert(
-            //     "",
-            //     "Enter Valid Email Address",
-            //     [
-            //         { text: "OK", onPress: () => console.log("OK Pressed") }
-            //     ]
-            // );
+
             setsnackbarText("Enter Valid Email")
             setsnackbar(true)
         }
@@ -73,10 +64,10 @@ export default function App({ route, navigation }) {
         else {
             setLoading(true)
             var data = { email: email.toLowerCase(), password }
-            // console.log(data)
-            Auth.login({ data })
+            console.log(data)
+            Auth.enggLogin({ data })
                 .then(async (res) => {
-                    // console.log(res.data)
+                    console.log(res.data)
                     if(res.data.code == -2)
                     {
                         setLoading(false)
@@ -91,11 +82,10 @@ export default function App({ route, navigation }) {
                         // console.log("Email Not Found")
                     }
                     else if (res.data.code == 1) {
-                        await AsyncStorage.setItem('@userid', res.data.user.id)
-                        await AsyncStorage.setItem('@email', res.data.user.email)
-                        await AsyncStorage.setItem('@name', res.data.user.name)
+                        await AsyncStorage.setItem('@enggUserid', res.data.user.id)
+                        await AsyncStorage.setItem('@enggName', res.data.user.name)
                         setLoading(false)
-                        navigation.navigate('Home')
+                        navigation.navigate('EHome')
                     }
                     else {
                         setLoading(false)
@@ -116,16 +106,17 @@ export default function App({ route, navigation }) {
         // console.log("After Save Name", await AsyncStorage.getItem('@name'))
 
     }
-    const onRegister = () => {
-        navigation.navigate('AccRegister')
-    }
-    const onEngg = () => {
-        navigation.navigate('ELogin')
-    }
+    // const onRegister = () => {
+    //     navigation.navigate('AccRegister')
+    // }
 
     useEffect(() => {
         // console.log(date.toLocaleDateString())
     }, [])
+
+    const onEngg = () => {
+        navigation.navigate('Login')
+    }
 
     return (
         // <ScrollView contentContainerStyle={styles.container}>
@@ -144,13 +135,13 @@ export default function App({ route, navigation }) {
                 actionText="OK"
                 accentColor='#ff9933' />
             <Image
-                source={require('../assets/header.png')}
+                source={require('../../assets/header.png')}
                 style={{ width: '100%', height: '10%', marginBottom: 15 }}
             />
             <Text style={{ fontSize: 20, fontWeight: '700', margin: 5 }}>Welcome to Orave Customer Care</Text>
             <View style={styles.register}>
-                <Text style={{ fontSize: 25, margin: 5,fontWeight:'bold' }}>
-                    LOGIN
+                <Text style={{ fontSize: 25, margin: 5 }}>
+                    ENGINEER LOGIN
                 </Text>
             </View>
             <View style={{ width: '95%', margin: 5 }}>
@@ -172,21 +163,21 @@ export default function App({ route, navigation }) {
             <TouchableOpacity onPress={onSave} style={styles.btnSave}>
                 <Text style={{ fontSize: 22, color: 'white' }}>Login</Text>
             </TouchableOpacity>
-
+            <TouchableOpacity onPress={onEngg} style={styles.btnEngg}>
+                <Text style={{ fontSize: 25, color: 'black' }}>
+                    {'<<<'} User Login
+                </Text>
+            </TouchableOpacity>
+{/* 
             <TouchableOpacity onPress={onRegister} style={styles.btnCancel}>
-                <Text style={{ fontSize: 17, color: 'blue',fontWeight:'bold' }}>
+                <Text style={{ fontSize: 15, color: 'blue' }}>
                     (Don't Have an Account, Click Here to Register)
                 </Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={onEngg} style={styles.btnEngg}>
-                <Text style={{ fontSize: 25,color:'black' }}>
-                    Engineer Login {'>>>'}
-                </Text>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
             <View style={{ height: '30%' }}>
 
             </View>
-            <Footer nav={navigation}/>
+            {/* <Footer nav={navigation}/> */}
         </SafeAreaView>
         //{/* </ScrollView > */ }
     );
@@ -203,7 +194,11 @@ const styles = StyleSheet.create({
     register: {
         // margin: 5,
     },
+    btnEngg: {
 
+        padding: 10,
+        alignItems: 'center',
+    },
     input: {
         width: '96%',
         height: 40,
@@ -219,11 +214,6 @@ const styles = StyleSheet.create({
         justifyContent: 'space-evenly'
     },
     btnCancel: {
-
-        padding: 10,
-        alignItems: 'center',
-    },
-    btnEngg: {
 
         padding: 10,
         alignItems: 'center',

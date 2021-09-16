@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { Image, StyleSheet, Text, RefreshControl, Pressable, View, ScrollView, TouchableOpacity, Alert, Modal } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { FontAwesome5 } from '@expo/vector-icons';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-import Footer from '../components/Footer'
+
+// import Footer from '../components/Footer'
 // import ListCard from '../components/ListCard'
 
 
-import * as Service from '../api/service';
+import * as Service from '../../api/service';
 import { forEach } from 'lodash';
 
 export default function App({ route, navigation }) {
@@ -17,20 +19,19 @@ export default function App({ route, navigation }) {
     const [user, setUser] = useState('User')
     const [userId, setUserId] = useState(null)
 
-    const [modalVisible, setModalVisible] = useState(false);
-    const [modalText, setModalText] = useState("Hello");
 
     const [refreshing, setRefreshing] = useState(false);
 
     const [data,setData] = useState([])
 
     const checkUser = async () => {
-        const userId = await AsyncStorage.getItem('@userid')
+        const userId = await AsyncStorage.getItem('@enggUserid')
         // console.log(userId)
         setUserId(userId)
         //const getHistory = async () => {
-            await Service.getAllServices({ data: userId })
+            await Service.getAllServicesEngg({ data: userId })
                 .then((res) => {
+                    // console.log(res.data);
                     const result = res.data.items
                     setData(result)
                     // console.log("Items:",res.data.items)
@@ -39,10 +40,10 @@ export default function App({ route, navigation }) {
                 .catch(err => console.log(err))
         //}
         if (userId == null) {
-            navigation.push('Login')
+            navigation.push('ELogin')
         }
         else {
-            const userName = await AsyncStorage.getItem('@name')
+            const userName = await AsyncStorage.getItem('@enggName')
             setUser(userName)
         }
     }
@@ -61,16 +62,13 @@ export default function App({ route, navigation }) {
         setRefreshing(false);
     };
 
-    const ListCard = ({ ID, reqDate, service, product, status}) => {
+    const ListCard = ({ ID, reqDate, service, product}) => {
         //console.log(data)
         var date = new Date(reqDate)
         var newDate = date.toLocaleDateString().toString()
 
-        var bgColor = 'white'
-        if(status == 'Completed') bgColor = '#42f5b9'
-
         return (
-            <TouchableOpacity onPress={cardPress} style={{...styles.listContainer,backgroundColor:bgColor}}>
+            <TouchableOpacity onPress={() => cardPress(ID)} style={styles.listContainer}>
                 <Text style={styles.text}>Request ID : 
                     <Text style={{fontWeight:'bold'}}> {ID}</Text>
                 </Text>
@@ -83,15 +81,13 @@ export default function App({ route, navigation }) {
                 <Text style={styles.text}>Product : 
                     <Text style={{ fontWeight: 'bold' }}> {product}</Text>
                 </Text>
-                <Text style={styles.text}>Status : 
-                    <Text style={{ fontWeight: 'bold' }}> {status}</Text>
-                </Text>
             </TouchableOpacity>
         );
     }
 
-    const cardPress = () => {
-        setModalVisible(true)
+    const cardPress = (ID) => {
+
+        navigation.navigate('EServiceDetail',{id:ID})
     }
 
     return (
@@ -100,12 +96,12 @@ export default function App({ route, navigation }) {
 
         <SafeAreaView style={styles.container}>
                 <Image
-                    source={require('../assets/header.png')}
+                    source={require('../../assets/header.png')}
                     style={{ width: '100%', height: '10%'}}
                 />
                 <View style={styles.register}>
                     <Text style={{ fontSize: 25, margin: 10, alignSelf: 'center'}}>
-                        Service Request History
+                        Service Requests
                     </Text>
                     <Text style={{ fontSize: 15, fontStyle: 'italic',textAlign:'center' }}>(Pull to refresh)</Text>
 
@@ -124,14 +120,16 @@ export default function App({ route, navigation }) {
                             reqDate={item.createdAt} 
                             service={item.service} 
                             product={item.product}
-                            status={item.status}
                         />)}
+                    {/* <ListCard />
+                    <ListCard />
+                    <ListCard /> */}
                     <View style={{height:70}}></View>
 
                 </ScrollView>
 
         </SafeAreaView>
-                <Footer nav={navigation} />
+                {/* <Footer nav={navigation} /> */}
 
         </>
         //{/* </ScrollView > */ }
@@ -160,7 +158,7 @@ const styles = StyleSheet.create({
     listContainer: {
         backgroundColor: 'white',
         width: '95%',
-        height: 140,
+        height: 120,
         //borderWidth:1,
         borderRadius: 10,
         padding: 5,

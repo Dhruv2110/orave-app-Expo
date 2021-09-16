@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Image, StyleSheet, Text, TextInput, View, ScrollView,Button, TouchableOpacity } from 'react-native';
+import { Image, StyleSheet, Dimensions, Text, TextInput, View, ScrollView,Button, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -7,6 +7,9 @@ import SnackBar from 'react-native-snackbar-component';
 import Spinner from 'react-native-loading-spinner-overlay';
 import { Picker } from '@react-native-picker/picker';
 import { BarCodeScanner } from 'expo-barcode-scanner';
+import BarcodeMask from 'react-native-barcode-mask';
+
+import { FontAwesome5 } from '@expo/vector-icons';
 
 import Footer from '../components/Footer'
 
@@ -76,8 +79,21 @@ const EG = [
     { name: 'GLAZE (OAI-EG-P-25L)', value: 'GLAZE-P-25L' },
 ]
 
+const finderWidth = 280;
+const finderHeight = 270;
+const width = Dimensions.get('window').width;
+const height = Dimensions.get('window').height;
+const viewMinX = (width - finderWidth) / 2;
+const viewMinY = (height - finderHeight) / 2;
+
 export default function App({navigation}) {
 
+    const [barCodeState, setBarCodeState] = useState({
+        hasCameraPermissions: null,
+        scanned: false,
+        scannedData: '',
+        buttonState: 'normal',
+    })
     const [loading, setLoading] = useState(false)
     const [snackbar, setsnackbar] = useState(false)
     const [snackbarText, setsnackbarText] = useState("")
@@ -92,29 +108,10 @@ export default function App({navigation}) {
     const [mode, setMode] = useState('date');
     const [show, setShow] = useState(false);
 
-    const [hasPermission, setHasPermission] = useState(null);
-    const [scanned, setScanned] = useState(false);
+    // const [hasPermission, setHasPermission] = useState(null);
+    // const [scanned, setScanned] = useState(false);
 
-    // useEffect(() => {
-    //     (async () => {
-    //         const { status } = await BarCodeScanner.requestPermissionsAsync();
-    //         setHasPermission(status === 'granted');
-    //     })();
-    // }, []);
-
-    // const handleBarCodeScanned = ({ type, data }) => {
-    //     setScanned(true);
-    //     alert(`Bar code with type ${type} and data ${data} has been scanned!`);
-    // };
-
-    // if (hasPermission === null) {
-    //     return <Text>Requesting for camera permission</Text>;
-    // }
-    // if (hasPermission === false) {
-    //     return <Text>No access to camera</Text>;
-    // }
-
-
+    // PRODUCT BINDING
     useEffect(() => {
         if (product == 'DOMESTIC WATER PURIFIER') {
             setModel(0)
@@ -157,23 +154,6 @@ export default function App({navigation}) {
         setShow(Platform.OS === 'ios');
         setDate(currentDate);
     };
-
-    const check = () => {
-        // console.log(product,model)
-        if (product == 0) {
-            setsnackbarText("Select Product")
-            setsnackbar(true)
-        }
-        else if (model == 0) {
-            setsnackbarText("Select Model")
-            setsnackbar(true)
-        }
-        else if (serialNo == '') {
-            setsnackbarText("Enter Serial No.")
-            setsnackbar(true)
-        }
-        else {}
-    }
 
     const onSave = async () => {
 
@@ -233,7 +213,48 @@ export default function App({navigation}) {
     }
 
 
+    const getCameraPermissions = async () => {
+        const { status } = await BarCodeScanner.requestPermissionsAsync();
+        setBarCodeState({
+            hasCameraPermissions: status === 'granted',
+            buttonState: 'clicked',
+            scanned: false,
+        });
+    };
+
+    const handleBarCodeScanned = async ({ type, data }) => {
+        setBarCodeState({
+            scanned: true,
+            scannedData: data,
+            buttonState: 'normal',
+        });
+    };
+
+    if (barCodeState.hasPermission === null) {
+        return <Text>Requesting for camera permission</Text>;
+    }
+    if (barCodeState.hasPermission === false) {
+        return <Text>No access to camera</Text>;
+    }
+    if (barCodeState.buttonState === 'clicked' && barCodeState.hasCameraPermissions) {
+        return (
+            // <BarCodeScanner
+            //     onBarCodeScanned={barCodeState.scanned ? undefined : handleBarCodeScanned}
+            //     style={StyleSheet.absoluteFillObject}
+            <View style={{flex: 1}}>
+                <BarCodeScanner
+                    onBarCodeScanned={barCodeState.scanned ? undefined : handleBarCodeScanned}
+                    style={[StyleSheet.absoluteFillObject, styles.containerBarCode]}
+                >
+
+                <BarcodeMask edgeColor = "#62B1F6" showAnimatedLine />
+                    {/* <Button title="Scan Again" onPress={() => {}} /> */}
+                </BarCodeScanner>
+            </View>
+        );}
+    else if (barCodeState.buttonState === 'normal') {
     return (
+        
         <SafeAreaView style={styles.container}>
             <Image
                 source={require('../assets/header.png')}
@@ -259,7 +280,7 @@ export default function App({navigation}) {
                     Register for New Product Warranty
                 </Text>
             </View>
-            <View style={{ width: '90%', margin: 10 }}>
+            <View style={{ width: '95%', margin: 10 }}>
                 <Text style={{ fontSize: 17,marginVertical:7,marginLeft:5 ,color:'blue'}}>Register Product:</Text>
                 <View style={styles.dropdown}>
                     <Picker
@@ -286,12 +307,20 @@ export default function App({navigation}) {
                         {modelList.map((item,index) => (<Picker.Item key={index} label={item.name} value={item.value} />))}
                     </Picker>
                 </View>
-                <TextInput
-                    style={styles.input}
-                    value={serialNo}
-                    onChangeText={setSerialNo}
-                    placeholder="*Select Serial Number"
-                />
+                <View style={{flexDirection:'row',alignItems:'center'}}>
+                    <TextInput
+                        style={{...styles.input,width:'58%',fontSize:15}}
+                        value={barCodeState.scannedData}
+                        // onChangeText={setSerialNo}
+                        placeholder="*Select Serial Number"
+                        editable={false}
+                    />
+                    <TouchableOpacity onPress={getCameraPermissions} style={styles.btnScan}>
+                        <FontAwesome5 name="camera" size={20} color="red" style={{margin:5}} />
+                        <Text style={{ fontSize: 14, color: 'black' }}>Scan</Text>
+                    </TouchableOpacity>
+                </View>
+
                 <TextInput
                     style={styles.input}
                     value={billNo}
@@ -312,17 +341,6 @@ export default function App({navigation}) {
                 />
                 )}
             </View>
-
-            {/* <View style={styles.barCode}>
-                <BarCodeScanner
-                    onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
-                    style={StyleSheet.absoluteFillObject}
-                />
-                {scanned && <Button title={'Tap to Scan Again'} onPress={() => setScanned(false)} />}
-            </View> */}
-            {/* <TouchableOpacity onPress={() => setScanned(false)} style={styles.btnCancel}>
-                <Text style={{ fontSize: 22, color: 'red' }}>scan</Text>
-            </TouchableOpacity> */}
             <View style={styles.btnContainer}>
                 <TouchableOpacity onPress={onCancel} style={styles.btnCancel}>
                     <Text style={{ fontSize: 22, color: 'red' }}>Cancel</Text>
@@ -335,8 +353,13 @@ export default function App({navigation}) {
         </SafeAreaView >
     );
 }
-
+}
 const styles = StyleSheet.create({
+    containerBarCode: {
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
     container: {
         flex: 1,
         backgroundColor: '#fff',
@@ -366,7 +389,8 @@ const styles = StyleSheet.create({
         margin: 7,
         borderWidth: 1,
         padding: 5,
-        borderRadius: 7
+        borderRadius: 7,
+        // fontSize:15
     },
     dateContainer: {
         width: "90%",
@@ -416,6 +440,19 @@ const styles = StyleSheet.create({
         padding: 10,
         borderRadius: 30,
         alignItems: 'center',
+
         backgroundColor: '#43BE72'
+    },
+    btnScan: {
+        width: '20%',
+        height: 40,
+        // margin: 50,
+        borderWidth: 1,
+        padding: 12,
+        borderRadius: 10,
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderColor: 'black',
+        flexDirection:'row'
     },
 });

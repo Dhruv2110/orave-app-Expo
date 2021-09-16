@@ -17,6 +17,12 @@ import RequestHistory from './screens/RequestHistory'
 import ROrent from './screens/ROrent'
 import ROrentHistory from './screens/ROrentHistory'
 
+import EHome from './screens/EnggScreens/EHome'
+import ELogin from './screens/EnggScreens/ELogin'
+import EServices from './screens/EnggScreens/EServices'
+import EServiceDetail from './screens/EnggScreens/EServiceDetail'
+import ERORent from './screens/EnggScreens/ERORent'
+
 
 import AMCplans from './screens/FooterScreens/AMCplans'
 import Contact from './screens/FooterScreens/Contact'
@@ -41,6 +47,12 @@ function App() {
         <Stack.Screen name="Contact" component={Contact} options={{ headerShown: false }} />
         <Stack.Screen name="ROrent" component={ROrent} options={{ headerShown: false }} />
         <Stack.Screen name="ROrentHistory" component={ROrentHistory} options={{ headerShown: false }} />
+
+        <Stack.Screen name="EHome" component={EHome} options={{ headerShown: false }} />
+        <Stack.Screen name="ELogin" component={ELogin} options={{ headerShown: false }} />
+        <Stack.Screen name="EServices" component={EServices} options={{ headerShown: false }} />
+        <Stack.Screen name="EServiceDetail" component={EServiceDetail} options={{ headerShown: false }} />
+        <Stack.Screen name="ERORent" component={ERORent} options={{ headerShown: false }} />
       </Stack.Navigator>
     </NavigationContainer>
   );
